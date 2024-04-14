@@ -23,30 +23,9 @@
             <search-bar />
         </div>
     </div>
-    <div v-if="!viewAllCollections" class="mt-3 w-full">
-      <div class="flex justify-between"> 
-        <div class="bg-white">ITEMS<span v-if="!viewAllProducts" @click="viewAllProducts = true" class="text-blue cursor-pointer ml-4">view all</span></div>
-        <div @click="goback()" v-if="viewAllProducts" class="px-2 rounded-lg bg-primary cursor-pointer">Back</div>
-      </div>
-      <simple-table :columns="columns" :table-data="tableData" :has-search="false">
-        <template v-slot:actions="{itemData}">
-          <div class="">
-            <div class="flex items-center">
-                <span class="flex items-center mr-3 text-primary2 hover:font-bold cursor-pointer" @click="viewProduct(itemData)">
-                <svg-icon name="view" height="h-5" width="w-5" class="mr-1" color="#257ae4"></svg-icon>
-                  view 
-              </span>
-            </div>
-          </div>
-        </template>
-      </simple-table>
-    </div>
 
-    <div v-if="!viewAllProducts"  class="mt-3"> 
-      <div class="flex justify-between"> 
-        <div class="bg-white">COLLECTIONS<span v-if="!viewAllCollections" @click="viewAllCollections = true" class="text-blue cursor-pointer ml-4">view all</span></div>
-        <div @click="goback()" v-if="viewAllCollections" class="px-2 rounded-lg bg-primary cursor-pointer">Back</div>
-      </div>
+    <div class="mt-3"> 
+      <div class="bg-white">COLLECTIONS<span class="text-blue cursor-pointer ml-4">view all</span></div>
       <div class="flex">
         <div v-for="(item, index) of collections" :key="index" class="justify-evenly p-10 col-md-3 cursor-pointer" style="">   
           <div @click="viewCollection(item)" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -66,9 +45,6 @@ import SimpleTable from "@/components/shared/SimpleTable.vue";
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const viewAllCollections = ref(false)
-const viewAllProducts = ref(false)
-
 const columns = ref({
   "itemName": 'item Name',
   "owner": 'owner',
@@ -82,15 +58,6 @@ const viewProduct = (item) => {
 const viewCollection = (item) => {
   console.log(item)
   router.push(`/collection/${item.tokenId}`)
-}
-const goback = () => {
-  console.log(viewAllCollections.value, viewAllProducts.value)
-  if(viewAllCollections){
-    viewAllCollections.value = false
-  }
-  else {
-    viewAllProducts.value = false
-  }
 }
 const tableData = ref([
   {

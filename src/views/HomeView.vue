@@ -3,6 +3,7 @@ import NavBar from '@/components/NavBar.vue'
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
 </script>
 
 <template>
@@ -47,7 +48,9 @@ const router = useRouter();
         </div>
       </div>
     </div>
+    
   </main>
+  
 </template>
 
 <style scoped>

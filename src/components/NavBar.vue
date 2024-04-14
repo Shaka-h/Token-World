@@ -4,7 +4,7 @@
             LOGO
         </div>
         <div class="flex space-x-4"> 
-            <div>connect Wallet</div>
+            <div>Connect Wallet</div>
             <div>Get Atsh</div>
         </div>
     </div>
