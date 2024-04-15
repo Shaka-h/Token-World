@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ProductHome from '../views/Products/ProductHome.vue'
 import ProductView from '../views/Products/ProductView.vue'
 import CollectionLanding from '../views/Products/Collection/CollectionLanding.vue'
+import CreateLanding from '@/views/Create/CreateLanding.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: '/item/:tokenId',
       name: 'collectionitem',
       component: ProductView
+    },
+    {
+      path: '/create',
+      name: 'create',
+      component: CreateLanding
     },
   ]
 })

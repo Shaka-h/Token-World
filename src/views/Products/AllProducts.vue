@@ -1,17 +1,7 @@
 <template>
     <NavBar />
     
-    <div class="flex w-full p-2 justify-between mt-2">
-        <div class="flex space-x-8 w-full"> 
-            
-            <div>0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF</div>
-        </div>
-        
-        <div class="flex space-x-2">
-            <div>Create </div>
-            <div>icon</div>
-        </div>
-    </div>
+    <Nav2 />
     <div class="flex w-full p-2 justify-between mt-2">
         <div class="flex space-x-8 w-full"> 
             <div>All</div>
@@ -45,6 +35,7 @@
 import NavBar from '@/components/NavBar.vue'
 import SearchBar from '@/components/SearchBar.vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
+import Nav2 from '@/components/Nav2.vue'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 

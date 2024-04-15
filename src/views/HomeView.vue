@@ -15,8 +15,18 @@ const router = useRouter();
         Explore our token world with your Atsh
       </div>
       <div class="w-full"> 
-        <div class="flex justify-evenly p-10">
-          <div @click="router.push('/Products')" class="card">
+        <div class="cards justify-evenly p-10">
+             <div @click="router.push('/Products')" class="card red">
+              <strong>Product</strong>
+            </div>
+            <div class="card blue">
+              <strong>Asset Investment</strong>
+            </div>
+            <div class="card green">
+              <strong>Services</strong>
+            </div>
+ 
+          <!-- <div @click="router.push('/Products')" class="card">
             <div class="content">
               <div class="back">
                 <div class="back-content">
@@ -44,7 +54,7 @@ const router = useRouter();
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -65,92 +75,53 @@ const router = useRouter();
   font-style: italic;
 }
 
-.card {
-  overflow: visible;
-  width: 190px;
-  height: 254px;
-  cursor: pointer;
+.cards {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
 }
 
-.content {
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 300ms;
-  box-shadow: 0px 0px 10px 1px #000000ee;
-  border-radius: 5px;
+.cards .red {
+  background-color: #f43f5e;
 }
 
-.back {
-  background-color: #151515;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 5px;
-  overflow: hidden;
+.cards .blue {
+  background-color: #3b82f6;
 }
 
-.back {
-  width: 100%;
-  height: 100%;
-  justify-content: center;
+.cards .green {
+  background-color: #22c55e;
+}
+
+.cards .card {
   display: flex;
   align-items: center;
-  overflow: hidden;
-}
-
-.back::before {
-  position: absolute;
-  content: ' ';
-  display: block;
-  width: 160px;
-  height: 160%;
-  background: linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent);
-  animation: rotation_481 5000ms infinite linear;
-}
-
-.back-content {
-  position: absolute;
-  width: 99%;
-  height: 99%;
-  background-color: #151515;
-  border-radius: 5px;
-  color: white;
-  display: flex;
+  justify-content: center;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
+  text-align: center;
+  height: 100px;
+  width: 250px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 400ms;
 }
 
-.card:hover .content {
-  width: 200px;
-  height: 264px;
+.cards .card p.tip {
+  font-size: 1em;
+  font-weight: 700;
 }
 
-@keyframes rotation_481 {
-  0% {
-    transform: rotateZ(0deg);
-  }
-
-  0% {
-    transform: rotateZ(360deg);
-  }
+.cards .card p.second-text {
+  font-size: .7em;
 }
- 
-@keyframes floating {
-  0% {
-    transform: translateY(0px);
-  }
 
-  50% {
-    transform: translateY(10px);
-  }
+.cards .card:hover {
+  transform: scale(1.1, 1.1);
+}
 
-  100% {
-    transform: translateY(0px);
-  }
+.cards:hover > .card:not(:hover) {
+  filter: blur(10px);
+  transform: scale(0.9, 0.9);
 }
 </style>
