@@ -3,7 +3,7 @@
 
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
-            <div class="bg-primary py-1 px-2 rounded-lg cursor-pointer">cart</div>
+            <div @click="router.push('/cart')" class="bg-primary py-1 px-2 rounded-lg cursor-pointer">cart</div>
             <div class="bg-primary py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 back
             </div>
@@ -91,6 +91,9 @@
 import NavBar from '@/components/NavBar.vue';
 import { ref } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const qty = ref(1);
 

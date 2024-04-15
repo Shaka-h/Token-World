@@ -25,6 +25,12 @@
                     <input class="border rounded-lg p-2"/>
                 </div>
             </div>
+            <div> 
+                <div class="font-bold text-1xl mt-2 "><span class="mr-2">*</span>Description</div>
+                <div> 
+                    <input class="border rounded-lg p-2"/>
+                </div>
+            </div>
         </div>
         <div class="flex mt-4">
             <div class="p-2 border bg-primary rounded-lg">Create</div>
