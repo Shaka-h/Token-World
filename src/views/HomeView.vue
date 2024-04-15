@@ -18,12 +18,17 @@ const router = useRouter();
         <div class="cards justify-evenly p-10">
              <div @click="router.push('/Products')" class="card red">
               <strong>Product</strong>
+              <div>With Atsh Stable coin benefit commodity exchanges </div>
             </div>
             <div class="card blue">
               <strong>Asset Investment</strong>
+              <div>With Atsh Stable coin begin your asset investments by investing in real estates, stocks, bonds ,etc using our stable coin </div>
+
             </div>
             <div class="card green">
               <strong>Services</strong>
+              <div>With Atsh Stable coin benefit different services offered by differnt collections such as special membership</div>
+
             </div>
  
           <!-- <div @click="router.push('/Products')" class="card">
@@ -99,8 +104,8 @@ const router = useRouter();
   justify-content: center;
   flex-direction: column;
   text-align: center;
-  height: 100px;
-  width: 250px;
+  height: 250px;
+  width: 350px;
   border-radius: 10px;
   color: white;
   cursor: pointer;

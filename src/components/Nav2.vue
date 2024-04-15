@@ -7,7 +7,7 @@
         <div class="flex space-x-2">
             <div @click="router.push('/create')" class="cursor-pointer">Create </div>
             <div @click="router.push('/cart')" class="cursor-pointer">Cart</div>
-            <div @click="router.push('/')" class="cursor-pointer">Taxes</div>            
+            <div @click="router.push('/tax')" class="cursor-pointer">Taxes</div>            
         </div>
     </div>
 </template>
