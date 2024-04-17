@@ -71,13 +71,15 @@ const router = useRouter();
 <style scoped>
 .heading{
   font-size: 100px;
-  font-family: 'Courier New', Courier, monospace;
-  font-style: italic;
+  font-family: 'Platypi';
+  color: #84A7A1;
 }
 .heading2{
   font-size: 50px;
-  font-family: 'Courier New', Courier, monospace;
+  font-weight: 100px;
+  font-family: 'Platypi';
   font-style: italic;
+  color: #84A7A1;
 }
 
 .cards {

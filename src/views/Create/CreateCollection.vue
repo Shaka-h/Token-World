@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="flex mt-4">
-            <div class="p-2 border bg-primary rounded-lg">Create</div>
+            <div class="p-2 border bg-primary2 text-white rounded-lg">Create</div>
         </div>
     </div>
 </template>

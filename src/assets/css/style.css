@@ -309,10 +309,35 @@
 .bg-danger {
   background-color: var(--danger);
 }
+.bg-primary {
+  background-color: #0E2954 !important; }
 
 .bg-primary2 {
-  background-color: #257AE4 !important;
+  background-color: #1F6E8C !important;
 }
+
+.bg-primary3 {
+  background-color: #84A7A1 !important;
+}
+
+.bg-primary4 {
+  background-color: #2E8A99 !important;
+}
+.border-primary {
+  border-color: solid #0E2954 !important; }
+
+.border-primary2 {
+  border-color: #1F6E8C !important;
+}
+
+.border-primary3 {
+  border-color: #84A7A1 !important;
+}
+
+.border-primary4 {
+  border-color: #2E8A99 !important;
+}
+
 
 html {
   font-family: sans-serif;
@@ -1683,9 +1708,7 @@ a.close.disabled {
     -webkit-transform: none;
     transform: none; } }
 
-.bg-primary {
-  background-color: #007bff !important; }
-
+ 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {

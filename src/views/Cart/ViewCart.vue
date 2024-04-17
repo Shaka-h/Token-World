@@ -15,7 +15,7 @@
             
         </div>
         <div v-if="activeTab==='mycart'" class="flex justify-end mt-4 space-x-3">
-            <div class="bg-primary py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+            <div class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Buy All
             </div>
         </div>
@@ -52,7 +52,7 @@
                             <button class="bg-danger px-2 py-1 rounded-lg">Remove</button>
                         </td>
                         <td>
-                            <button class="bg-primary px-2 py-1 rounded-lg">Buy</button>
+                            <button class="bg-primary2 px-2 py-1 rounded-lg">Buy</button>
                         </td>
                       </tr>
                     </tbody>

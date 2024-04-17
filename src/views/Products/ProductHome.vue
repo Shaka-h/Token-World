@@ -15,7 +15,7 @@
     <div v-if="!viewAllCollections" class="mt-3 w-full">
       <div class="flex justify-between"> 
         <div class="bg-white">ITEMS<span v-if="!viewAllProducts" @click="viewAllProducts = true" class="text-blue cursor-pointer ml-4">view all</span></div>
-        <div @click="goback()" v-if="viewAllProducts" class="px-2 rounded-lg bg-primary cursor-pointer">Back</div>
+        <div @click="goback()" v-if="viewAllProducts" class="px-2 rounded-lg text-white bg-primary cursor-pointer">Back</div>
       </div>
       <simple-table :columns="columns" :table-data="tableData" :has-search="false">
         <template v-slot:actions="{itemData}">

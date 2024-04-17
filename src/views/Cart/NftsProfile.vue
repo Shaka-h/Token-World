@@ -2,7 +2,7 @@
 
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
-            <div class="bg-primary py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+            <div class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 back
             </div>
         </div>

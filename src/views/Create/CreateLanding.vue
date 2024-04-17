@@ -4,14 +4,14 @@
         <div class="font-bold text-3xl"> 
             Create your NFTs
         </div>
-        <div class="bg-primary py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+        <div class="bg-primary text-white items-center py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
             back
         </div>
     </div>
     <div class="flex m-4 h-full flex justify-evenly"> 
         <div class="flex flex-col" style="width: 40%">         
             <template v-for="(component, index) of components" :key="index" >
-                     <div v-if="component.id === activeComponent" class="cursor-pointer border mt-8 p-2 rounded-lg bg-primary">
+                     <div v-if="component.id === activeComponent" class="cursor-pointer border mt-8 p-4 text-white rounded-lg bg-primary2">
                         <div>{{component.detail}}</div>
                         <div> 
                             <div>{{component.detail2}}</div>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
     
-                    <div v-else class="cursor-pointer border p-2 rounded-lg mt-8" @click="activeComponent=component.id">
+                    <div v-else class="cursor-pointer border p-4 rounded-lg mt-8" @click="activeComponent=component.id">
                         <div>{{component.detail}}</div>
                         <div> 
                             <div>{{component.detail2}}</div>
@@ -72,7 +72,7 @@ const components = ref([
         detail2: "If you are new to the token world create your nft collection to mint your items",
         detail3 : "An NFT collection refers to a group or series of NFTs that share common characteristics, such as belonging to the same artist, representing a specific theme, or being part of a particular project.",
         detail4: "Collections can be created by individual artists, companies, or communities, and they often have a unique name, brand, or theme associated with them.",
-        detail5: "Examples of NFT collections include CryptoPunks, CryptoKitties, and Hashmasks."
+        detail5: "Examples of NFT collections include Diamond Songs, Toyota Cars, and Mac electronics."
     },
     {
         name: "createItem",

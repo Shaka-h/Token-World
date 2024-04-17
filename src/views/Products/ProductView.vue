@@ -3,9 +3,9 @@
 
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
-            <div @click="router.push('/cart')" class="bg-primary py-1 px-2 rounded-lg cursor-pointer">cart</div>
-            <div class="bg-primary py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-                back
+            <div @click="router.push('/cart')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">Cart</div>
+            <div class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+                Back
             </div>
         </div>
     
@@ -57,8 +57,8 @@
                              <input />
                          </div>
                          <div class="flex space-x-4">
-                             <div class="border py-1 px-4 bg-primary2 rounded-lg cursor-pointer">Buy</div>
-                             <div class="border py-1 px-4 bg-indigo rounded-lg cursor-pointer">Add To Cart</div>
+                            <div class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Add To Cart</div>
+                             <div class="border py-1 px-4 bg-primary text-white rounded-lg cursor-pointer">Buy</div>
                          </div>
                      </div>
                     </div>
