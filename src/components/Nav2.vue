@@ -25,16 +25,6 @@
                 </span>
                 <span class="text">Profile</span>
             </div>
-            <div @click="router.push('/tax')" class="btn bg-primary4 cursor-pointer">
-                <span class="icon">
-                    <svg viewBox="0 0 175 80" width="30" height="30">
-                        <rect width="80" height="15" fill="#161616" rx="10"></rect>
-                        <rect y="30" width="80" height="15" fill="#161616" rx="10"></rect>
-                        <rect y="60" width="80" height="15" fill="#161616" rx="10"></rect>
-                    </svg>
-                </span>
-                <span class="text">Taxes</span>
-            </div>
         </div>
     </div>
 </template>

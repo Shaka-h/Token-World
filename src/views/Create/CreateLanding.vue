@@ -4,7 +4,7 @@
         <div class="font-bold text-3xl"> 
             Create your NFTs
         </div>
-        <div class="bg-primary text-white items-center py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+        <div @click="goBack" class="bg-primary text-white items-center py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
             back
         </div>
     </div>

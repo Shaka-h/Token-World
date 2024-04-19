@@ -9,11 +9,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract MyCollection is ERC721URIStorage {
+    // Payable fallback function
+    fallback() external payable {}
+
+    // Payable receive function (Solidity version >= 0.6.0)
+    receive() external payable {}
+    
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
     string public logo;
     string public description;
+
+    address public marketContractAddress;
+
 
     string[] public allCollectionTokens;
     mapping (uint256 => string) tokenURIById;
@@ -21,6 +30,10 @@ contract MyCollection is ERC721URIStorage {
     constructor(string memory name, string memory symbol, string memory _logo, string memory _description) ERC721(name, symbol) {
         logo = _logo;
         description = _description;
+    }
+
+    function setMarketContractAddress (address _marketContractAddress) external {
+        marketContractAddress = _marketContractAddress;
     }
 
     function createToken(string memory tokenURI) public returns (uint) {
@@ -32,6 +45,7 @@ contract MyCollection is ERC721URIStorage {
 
         allCollectionTokens.push(tokenURI); // Add the new token ID to the array
         tokenURIById[newItemId] = tokenURI; // Store the token URI in the mapping
+        setApprovalForAll(marketContractAddress, true); //grant transaction permission to marketplace
 
         return newItemId; // Return the new token ID
     }

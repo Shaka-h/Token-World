@@ -1,28 +1,23 @@
 <template>
     <NavBar />
     <Nav2 />
-    <div class="flex w-full p-2 justify-between mt-2">
-        <div class="flex space-x-8 w-full"> 
-            <div>All</div>
-            <div>Trending</div>
-            <div>Select categories</div>
-        </div>
-        
+    <div class="flex w-full p-2 justify-end mt-2">
+                
         <div class="flex">
             <search-bar />
         </div>
     </div>
     <div v-if="!viewAllCollections" class="mt-3 w-full">
       <div class="flex justify-between"> 
-        <div class="bg-white">ITEMS<span v-if="!viewAllProducts" @click="viewAllProducts = true" class="text-blue cursor-pointer ml-4">view all</span></div>
-        <div @click="goback()" v-if="viewAllProducts" class="px-2 rounded-lg text-white bg-primary cursor-pointer">Back</div>
+        <div class="bg-white mx-4 font-bold">ITEMS<span v-if="!viewAllProducts" @click="viewAllProducts = true" class="text-blue cursor-pointer ml-4">view all</span></div>
+        <div @click="gobackItem()" v-if="viewAllProducts" class="px-2 py-1 rounded-lg text-white bg-primary2 mx-4 cursor-pointer">Back</div>
       </div>
       <simple-table :columns="columns" :table-data="tableData" :has-search="false">
         <template v-slot:actions="{itemData}">
           <div class="">
             <div class="flex items-center">
                 <span class="flex items-center mr-3 text-primary2 hover:font-bold cursor-pointer" @click="viewProduct(itemData)">
-                <svg-icon name="view" height="h-5" width="w-5" class="mr-1" color="#257ae4"></svg-icon>
+                <svg-icon name="view" height="h-5" width="w-5" class="mr-1 hover:border-b" color="#257ae4"></svg-icon>
                   view 
               </span>
             </div>
@@ -33,8 +28,8 @@
 
     <div v-if="!viewAllProducts"  class="mt-3"> 
       <div class="flex justify-between"> 
-        <div class="bg-white">COLLECTIONS<span v-if="!viewAllCollections" @click="viewAllCollections = true" class="text-blue cursor-pointer ml-4">view all</span></div>
-        <div @click="goback()" v-if="viewAllCollections" class="px-2 rounded-lg bg-primary cursor-pointer">Back</div>
+        <div class="bg-white mx-4 font-bold">COLLECTIONS<span v-if="!viewAllCollections" @click="viewAllCollections = true" class="text-blue cursor-pointer ml-4">view all</span></div>
+        <div @click="gobackCollection()" v-if="viewAllCollections" class="px-2 rounded-lg py-1 bg-primary2 text-white mx-4 cursor-pointer">Back</div>
       </div>
       <div class="flex">
         <div v-for="(item, index) of collections" :key="index" class="justify-evenly p-10 col-md-3 cursor-pointer" style="">   
@@ -73,15 +68,29 @@ const viewCollection = (item) => {
   console.log(item)
   router.push(`/collection/${item.tokenId}`)
 }
-const goback = () => {
+
+
+const gobackCollection = () => {
   console.log(viewAllCollections.value, viewAllProducts.value)
-  if(viewAllCollections){
+  if(viewAllCollections ){
     viewAllCollections.value = false
   }
   else {
     viewAllProducts.value = false
   }
 }
+
+
+const gobackItem = () => {
+  console.log(viewAllCollections.value, viewAllProducts.value)
+  if(viewAllProducts ){
+    viewAllProducts.value = false
+  }
+  else {
+    viewAllProducts.value = false
+  }
+}
+
 const tableData = ref([
   {
     "itemName": 'Iphone 14',

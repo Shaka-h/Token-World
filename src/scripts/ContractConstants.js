@@ -1,3 +1,8 @@
+import { ref } from 'vue';
+
+export const walletConnected = ref();
+export const walletAddressConnected = ref();
+
 export const nftFactory_Address = "0x041D0d9A2fe35e412855609f929F1B579c6badB5"
 export const nftFactory_ABI = [
 	{

@@ -2,13 +2,7 @@
     <NavBar />
     
     <Nav2 />
-    <div class="flex w-full p-2 justify-between mt-2">
-        <div class="flex space-x-8 w-full"> 
-            <div>All</div>
-            <div>Trending</div>
-            <div>Select categories</div>
-        </div>
-        
+    <div class="flex w-full p-2 justify-end mt-2">    
         <div class="flex">
             <search-bar />
         </div>
