@@ -41,7 +41,7 @@ const router = createRouter({
       component: CreateLanding
     },
     {
-      path: '/cart',
+      path: '/cart/:nftAddress',
       name: 'cart',
       component: ViewCart
     },

@@ -76,15 +76,15 @@ import NftsProfile from '@/views/Cart/NftsProfile.vue'
 import { ref } from 'vue';
 import Transactions from '@/views/Cart/Transactions.vue';
 
-const activeTab = ref('mycart')
+const activeTab = ref('nfts')
 const activity = ref([
-    {
-        name: "My Cart",
-        id: 'mycart'
-    },
     {
         name: "My NFTs",
         id: 'nfts'
+    },
+    {
+        name: "My Cart",
+        id: 'mycart'
     },
     {
         name: "My Transactions",

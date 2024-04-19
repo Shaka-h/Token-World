@@ -49,15 +49,24 @@
 <script setup>
 import { ref } from 'vue';
 import {getSignerContract} from '../../scripts/ContractUtils';
-let {nftMyCollection_contract} = getSignerContract();
-
+import router from '@/router';
 import addMetadata  from '@/scripts/IPFS'
+import {nftMyCollection_ABI } from '@/scripts/ContractConstants'
+import {ethers} from 'ethers';
+
+
+let {signer} = getSignerContract();
 
 const name = ref('');
 const fileString = ref('');
 const supply = ref(null);
 const description = ref('');
 const symbolCID = ref('')
+
+
+const nftMyCollection_Address = ref("0x8da8A4613e1F1b00b86D738B21F343d933074a0a");
+
+const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
 
 
 const uploadItem = async () => {
@@ -76,14 +85,17 @@ const getItemCID = async () => {
         await uploadItem();
 
         const itemCID = await addMetadata(
-            name.value,
-            symbolCID.value,
-            logo.value,
-            description.value,
+            {
+                "name": name.value,
+                "symbolCID":symbolCID.value,
+                "supply": supply.value,
+                "description": description.value,
+            }
+            
         );
+        console.log('Item created successfully with metadata. CID:', itemCID);
 
         return itemCID
-        console.log('Item created successfully with metadata. CID:', itemCID);
     } catch (error) {
         console.error('Error creating collection:', error);
     }
@@ -93,12 +105,13 @@ const getItemCID = async () => {
 const MintItem = async () => {
     try {
         let tokenURI = await getItemCID();
-
-        await nftMyCollection_contract.createToken(
+        console.log(tokenURI);
+        const tokenURIReturned = await nftMyCollection_contract.createToken(
             tokenURI
 
         ).then(result => {
             console.log(result)
+            router.push("/item/1")
         }).catch(err => {
             console.error(err)
         }) 

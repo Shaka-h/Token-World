@@ -1,9 +1,12 @@
 <template>
-    <NavBar />
+    <NavBar />{{ router.currentRoute?.params?.tokenId }}
+    <a :href="`http://127.0.0.1:5001/ipfs/bafybeigggyffcf6yfhx5irtwzx3cgnk6n3dwylkvcpckzhqqrigsxowjwe/#/ipfs/QmPFTp69vTTwYfnVzcdbnqBFBNLy4g4z39VmJMZJpSoUw6`" target="_blank" class="hover:underline text-base truncate"> yhgb</a>
+
+    <img src="http://127.0.0.1:5001/ipfs/bafybeigggyffcf6yfhx5irtwzx3cgnk6n3dwylkvcpckzhqqrigsxowjwe/#/ipfs/QmPFTp69vTTwYfnVzcdbnqBFBNLy4g4z39VmJMZJpSoUw6" alt="icon description" class="p-2">
 
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
-            <div @click="router.push('/cart')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">Cart</div>
+            <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">Cart</div>
             <div class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Back
             </div>
@@ -89,13 +92,23 @@
 
 <script setup>
 import NavBar from '@/components/NavBar.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
 import { useRouter } from 'vue-router';
+import {getSignerContract} from '../../scripts/ContractUtils';
+import {nftMyCollection_ABI } from '@/scripts/ContractConstants'
+import {ethers} from 'ethers';
+import getMetadata  from '@/scripts/IPFScat'
+
+
+let {signer} = getSignerContract();
+
 
 const router = useRouter()
 
 const qty = ref(1);
+
+const itemDetails = ref();
 
 const columns = ref({
     "unitPrice": "Unit Price",
@@ -141,6 +154,32 @@ const tableData = ref([
         "from": "0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF",
     },
 ])
+
+const nftMyCollection_Address = ref("0x8da8A4613e1F1b00b86D738B21F343d933074a0a");
+
+const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
+
+const getItemDetails = () => {
+    getMetadata("QmPFTp69vTTwYfnVzcdbnqBFBNLy4g4z39VmJMZJpSoUw6")
+    .then((metadata) => {
+        console.log('Metadata retrieved successfully:', metadata);
+    })
+    .catch((error) => {
+        console.error('Failed to retrieve metadata:', error);
+    });
+}
+
+
+onMounted(async () => {
+    try {
+        itemDetails.value = await nftMyCollection_contract.getTokenURIById(1);
+        console.log(itemDetails.value); 
+        getItemDetails()
+    } catch (error) {
+        console.error('Error fetching item details:', error);
+    }
+});
+
 
 </script>
  

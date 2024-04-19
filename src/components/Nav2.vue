@@ -15,7 +15,7 @@
                 </span>
                 <span class="text">Create</span>
             </div>
-            <div @click="router.push('/cart')" class="btn bg-primary4 cursor-pointer">
+            <div @click="router.push('/cart/1')" class="btn bg-primary4 cursor-pointer">
                 <span class="icon">
                     <svg viewBox="0 0 175 80" width="30" height="30">
                         <rect width="80" height="15" fill="#161616" rx="10"></rect>
@@ -23,7 +23,7 @@
                         <rect y="60" width="80" height="15" fill="#161616" rx="10"></rect>
                     </svg>
                 </span>
-                <span class="text">Cart</span>
+                <span class="text">Profile</span>
             </div>
             <div @click="router.push('/tax')" class="btn bg-primary4 cursor-pointer">
                 <span class="icon">

@@ -42,6 +42,7 @@
 import { ref } from 'vue';
 import {getSignerContract} from '../../scripts/ContractUtils';
 import addMetadata  from '@/scripts/IPFS'
+import router from '@/router';
 
 
 let {nftFactory_contract, nftMyCollection_contract} = getSignerContract();
@@ -68,20 +69,25 @@ const CreateCollection = async () => {
     try {
         await uploadLogo();
 
-        await nftFactory_contract.deployNFTContract(
+        const deployedContractAddress = await nftFactory_contract.deployNFTContract(
             name.value,
             logoCID.value,
             symbol.value,
             description.value,
+        );
+        console.log(deployedContractAddress); // Log the deployed contract address
 
-        ).then(result => {
-            console.log(result)
-        }).catch(err => {
-            console.error(err)
-        }) 
+        // Ensure that deployedContractAddress is not null or undefined before routing
+        if (deployedContractAddress) {
+            await router.push("/cart/0xD5e04C3e3FfaA4F3B6B3277033dB25d25f02994D");
+        } else {
+            console.error('Error creating collection: Deployed contract address not returned.');
+        }
     } catch (error) {
         console.error('Error creating collection:', error);
     }
 }
+
+
 
 </script>
