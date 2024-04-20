@@ -41,7 +41,8 @@ contract NFTMarket is ReentrancyGuard {
         address  seller,
         address  owner,
         uint256 price,
-        bool sold
+        bool sold,
+        uint256 currentBiddingPrice
     );
   
 
@@ -77,7 +78,8 @@ contract NFTMarket is ReentrancyGuard {
              msg.sender,
              address(0),
              price,
-             false);
+             false,
+             price);
 
         }
 
@@ -86,7 +88,7 @@ contract NFTMarket is ReentrancyGuard {
         uint256 itemID;
         uint256 offerPrice;
         address payable offerer;
-        bool status;
+        bool offerAccepted;
         uint256 offerID;
     }
 
@@ -97,14 +99,26 @@ contract NFTMarket is ReentrancyGuard {
         require(msg.value == offerPrice, "Please submit the offer price in order to complete making an offer");
 
 
-         // only seller can accept offer
-        require(msg.sender == idMarketItem[itemID].seller, "Seller can not make offer");
+         // seller cannot make offer
+        require(msg.sender != idMarketItem[itemID].seller, "Seller can not make offer");
 
         // Get Item details of a specific offer to know if already sold or not
         require(!idMarketItem[itemID].sold, "Item already sold");
 
 
         address nftContractAddress = idMarketItem[itemID].nftContract;
+
+         // Decline the previous offer
+        Offer[] storage previousOffers = offersMadeToItem[itemID];
+        if (previousOffers.length > 0) {
+            previousOffers[previousOffers.length - 1].offerAccepted = false;
+
+            // Transfer payment from contract to previousOfferer
+            previousOffers[previousOffers.length - 1].offerer.transfer(previousOffers[previousOffers.length - 1].offerPrice);
+        }
+
+        // Update the current highest offer price
+        idMarketItem[itemID].currentBiddingPrice = offerPrice;
 
         _offerID.increment();
 
@@ -114,11 +128,29 @@ contract NFTMarket is ReentrancyGuard {
             itemID: itemID,
             offerPrice: msg.value,
             offerer: payable(msg.sender),
-            status: false,
+            offerAccepted: true,
             offerID: _offerID.current()
         }));
     }
 
+
+    function getAllOffersMade(uint256 itemID) external view returns (Offer[] memory) {
+        Offer[] storage offers = offersMadeToItem[itemID];
+        Offer[] memory offersInfo = new Offer[](offers.length);
+
+        for (uint256 i = 0; i < offers.length; i++) {
+            offersInfo[i] = Offer({
+                nftContract: offers[i].nftContract,
+                itemID: offers[i].itemID,
+                offerPrice: offers[i].offerPrice,
+                offerer: offers[i].offerer,
+                offerAccepted: offers[i].offerAccepted,
+                offerID: offers[i].offerID
+            });
+        }
+
+        return offersInfo;
+    }
 
     function acceptOffer(uint256 offerId, address nftContract) external {
         // Get the array of offers made to the item with offerId
@@ -127,14 +159,15 @@ contract NFTMarket is ReentrancyGuard {
         // Verify if the offer with the given ID exists
         require(offers.length > 0 && offerId <= offers.length, "Invalid offer ID");
 
+        // Get the index of the last offer in the array
+        uint256 lastIndex = offers.length - 1;
+
         // Get the offer with the given ID
-        Offer storage offer = offers[offerId - 1];
+        Offer storage offer = offers[lastIndex];
 
         // Check if the offer has already been accepted
-        require(!offer.status, "Offer already accepted");
+        require(!offer.offerAccepted, "Offer already accepted");
 
-        // Mark the offer as accepted
-        offer.status = true;
 
         // Extract necessary details
         uint256 itemId = offer.itemID;
@@ -142,7 +175,7 @@ contract NFTMarket is ReentrancyGuard {
         uint256 offerPrice = offer.offerPrice;
         address payable offerer = offer.offerer;
 
-        // Transfer payment from buyer to seller
+        // Transfer payment from contract to seller
         idMarketItem[itemId].seller.transfer(offerPrice);
 
         // Transfer NFT ownership from contract to buyer
@@ -153,38 +186,7 @@ contract NFTMarket is ReentrancyGuard {
         idMarketItem[itemId].sold = true;
         _itemsSold.increment();
 
-        returnOffers(itemId);
     }
-
-    function returnOffers(uint256 itemId) private {
-        // Get the array of offers made to the item with itemId
-        Offer[] storage offers = offersMadeToItem[itemId];
-
-        // Find the index of the accepted offer
-        uint256 indexToRemove;
-        for (uint256 i = 0; i < offers.length; i++) {
-            if (offers[i].status) {
-                indexToRemove = i;
-                break;
-            }
-        }
-
-        // Remove the accepted offer from the array
-        if (indexToRemove < offers.length) {
-            for (uint256 i = indexToRemove; i < offers.length - 1; i++) {
-                offers[i] = offers[i + 1];
-            }
-            offers.pop();
-        }
-
-        // Return the amount to the remaining offerers
-        for (uint256 i = 0; i < offers.length; i++) {
-            if (!offers[i].status) {
-                offers[i].offerer.transfer(offers[i].offerPrice);
-            }
-        }
-    }
-
 
 
     /// @notice total number of items unsold on our platform
