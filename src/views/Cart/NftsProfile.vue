@@ -1,5 +1,5 @@
 <template>
-    <!-- {{  router.currentRoute?.params?.nftAddress }} -->
+    {{  router?.params?.nftAddress  }}
 
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
@@ -55,12 +55,13 @@
 import NavBar from '@/components/NavBar.vue';
 import { onMounted, ref } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import {getSignerContract} from '../../scripts/ContractUtils';
 let {nftFactory_contract, nftMyCollection_contract} = getSignerContract();
+import {ipfsGateway} from "../../scripts/ContractConstants";
 
 
-const router = useRouter()
+const router = useRoute()
 
 const qty = ref(1);
 const viewProduct = (item) => {
@@ -69,19 +70,14 @@ const viewProduct = (item) => {
 }
 
 const myNft = ref()
+const logoCID = ref()
 
 onMounted(() => {
-    try {
-        myNft.value = nftFactory_contract.getNFTCollectionByAddress(
-            "0x8da8A4613e1F1b00b86D738B21F343d933074a0a"
-        ).then(result => {
-            console.log(result)
-        }).catch(err => {
-            console.error(err)
-        });
-    } catch (error) {
-        console.error('Error creating collection:', error);
-    }
+    myNft.value = nftFactory_contract.getNFTCollectionByAddress(
+        router?.params?.nftAddress
+    )    
+
+    logoCID.value = ""
 })
 
 const columns = ref({

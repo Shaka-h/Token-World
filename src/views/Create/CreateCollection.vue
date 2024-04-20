@@ -4,7 +4,7 @@
             <div class="font-bold text-1xl"><span class="mr-2">*</span>Logo Image</div>
             <div class="flex flex-col space-y-2"> 
                 <div class="border rounded-lg items-center justify-center flex ">
-                    <input v-model="logo" type="" class=" h-32 p-2 border m-2" />
+                    <input type="file" @change="setFilePath()" class=" h-32 p-2 border m-2" />
                     <div class="border w-full p-3 m-3">image
                         <div>Upload the logo image of your collection</div>
 
@@ -51,12 +51,15 @@ const name = ref('');
 const logo = ref('');
 const symbol = ref(null);
 const description = ref('');
-const logoCID = ref('')
+const logoCID = ref(null)
 
+const setFilePath = (event) => {
+    logo.value = event.target.files[0]
+}
 
 const uploadLogo = async () => {
     try {
-        const logoString = await addMetadata(logo.value);
+        const logoString = await addMetadataFile(logo.value);
         console.log('Logo uploaded to IPFS with CID:', logoString.toString());
         logoCID.value = logoString.toString(); 
     } catch (error) {
@@ -66,26 +69,36 @@ const uploadLogo = async () => {
 };
 
 const CreateCollection = async () => {
-    try {
-        await uploadLogo();
 
-        const deployedContractAddress = await nftFactory_contract.deployNFTContract(
-            name.value,
-            logoCID.value,
-            symbol.value,
-            description.value,
-        );
-        console.log(deployedContractAddress); // Log the deployed contract address
+    console.log(logo.value);
+    // try {
+    //     await uploadLogo();
 
-        // Ensure that deployedContractAddress is not null or undefined before routing
-        if (deployedContractAddress) {
-            await router.push("/cart/0xD5e04C3e3FfaA4F3B6B3277033dB25d25f02994D");
-        } else {
-            console.error('Error creating collection: Deployed contract address not returned.');
-        }
-    } catch (error) {
-        console.error('Error creating collection:', error);
-    }
+    //     const deployedContractAddress = await nftFactory_contract.deployNFTContract(
+    //         name.value,
+    //         symbol.value,
+    //         logoCID.value,
+    //         description.value,
+    //     );
+    //     console.log(deployedContractAddress); // Log the deployed contract address
+
+    //     // wait() function allows to wait for transaction to be completed
+    //     let receipt = await deployedContractAddress.wait()  
+
+    //     // not decodeFunctionData
+    //     // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+    //     // encodedData is found in receipt
+
+    //     // Ensure that deployedContractAddress is not null or undefined before routing
+    //     if (receipt?.events[0]?.args?.nftContract) {
+    //         await router.push(`/cart/${receipt?.events[0]?.args?.nftContract}`);
+    //     } else {
+    //         console.error('Error creating collection: Deployed contract address not returned.');
+    //     }
+
+    // } catch (error) {
+    //     console.error('Error creating collection:', error);
+    // }
 }
 
 
