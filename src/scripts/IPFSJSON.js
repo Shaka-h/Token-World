@@ -20,4 +20,18 @@ async function addMetadataFile(metadata) {
 }
 
 
-export default addMetadataFile;
+// Function to add metadata to IPFS
+async function addMetadata(metadata) {
+    try {
+        // Add metadata to IPFS 
+        const { cid } = await ipfs.add(JSON.stringify(metadata));
+
+        console.log('Metadata added to IPFS with CID:', cid.toString());
+        return cid.toString();
+    } catch (error) {
+        console.error('Error adding metadata to IPFS:', error);
+        throw error;
+    }
+}
+
+export default addMetadata;

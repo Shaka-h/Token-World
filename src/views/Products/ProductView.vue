@@ -1,9 +1,5 @@
 <template>
     <NavBar />{{ router.currentRoute?.params?.tokenId }}
-    <a :href="`http://127.0.0.1:5001/ipfs/bafybeigggyffcf6yfhx5irtwzx3cgnk6n3dwylkvcpckzhqqrigsxowjwe/#/ipfs/QmPFTp69vTTwYfnVzcdbnqBFBNLy4g4z39VmJMZJpSoUw6`" target="_blank" class="hover:underline text-base truncate"> yhgb</a>
-
-    <img src="http://127.0.0.1:5001/ipfs/bafybeigggyffcf6yfhx5irtwzx3cgnk6n3dwylkvcpckzhqqrigsxowjwe/#/ipfs/QmPFTp69vTTwYfnVzcdbnqBFBNLy4g4z39VmJMZJpSoUw6" alt="icon description" class="p-2">
-
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
             <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">Cart</div>
