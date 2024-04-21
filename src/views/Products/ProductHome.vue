@@ -34,6 +34,10 @@
       <div class="flex">
         <div v-for="(item, index) of collections" :key="index" class="justify-evenly p-10 col-md-3 cursor-pointer" style="">   
           <div @click="viewCollection(item)" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <div class="flex items-center">
+              <img :src="'http://127.0.0.1:8080/ipfs/' + item.logo" alt="icon description" class="p-2 h-32 w-32">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{item.symbol}}</h5>
+            </div>
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{item.name}}</h5>
             <p class="font-normal text-gray-700 dark:text-gray-400">{{item.description}}</p>
           </div>
@@ -52,25 +56,28 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {getSignerContract} from '../../scripts/ContractUtils';
 
-let {marketPlace_contract} = getSignerContract();
+let {marketPlace_contract,nftFactory_contract} = getSignerContract();
 
 
 const viewAllCollections = ref(false)
 const viewAllProducts = ref(false)
 
 const columns = ref({
-  "itemName": 'item Name',
-  "owner": 'owner',
-  "price": 'price',
+  "name": 'Item Name',
+  "description": 'Description',
+  "seller": 'Owner',
+  "price": 'Price',
+  "currentBiddingPrice": 'Current Offer'
 })
 const router = useRouter();
 const viewProduct = (item) => {
-  console.log(item.tokenId)
-  router.push(`/item/${item.tokenId}`)
+  console.log(item.itemId)
+  const itemID = item.itemId.toNumber()
+  router.push(`/item/${itemID}`)
 }
 const viewCollection = (item) => {
-  console.log(item)
-  router.push(`/collection/${item.tokenId}`)
+  console.log(item.NftContract)
+  router.push(`/collection/${item.NftContract}`)
 }
 
 
@@ -97,49 +104,13 @@ const gobackItem = () => {
 
 const tableData = ref([])
 
-const collections = ref ([
-  {
-    "name": "Classic Console",
-    "description": "Relive the golden age of gaming with this iconic console that pioneered the home entertainment revolution.",
-    "rarity": "Legendary",
-    "tokenId": 1,
-  },
-  {
-    "name": "Smartphone Sensation",
-    "description": "Experience the evolution of communication with this groundbreaking smartphone that changed the way we connect and interact.",
-    "rarity": "Epic",
-    "tokenId": 1,
-  },
-  {
-    "name": "Revolutionary Robot",
-    "description": "Meet the futuristic robot that revolutionized automation and robotics, ushering in a new era of technological innovation.",
-    "rarity": "Mythic",
-    "tokenId": 1,
-  },
-  {
-    "name": "Digital Camera Masterpiece",
-    "description": "Capture life's precious moments with unparalleled clarity and precision using this legendary digital camera that redefined photography.",
-    "rarity": "Legendary",
-    "tokenId": 1,
-  },
-  {
-    "name": "Smartwatch Wonder",
-    "description": "Stay connected and organized on the go with this innovative smartwatch that seamlessly integrates technology into your daily life.",
-    "rarity": "Rare",
-    "tokenId": 1,
-  },
-  {
-    "name": "Virtual Reality Voyager",
-    "description": "Immerse yourself in virtual worlds with this cutting-edge VR headset that transports you to realms limited only by your imagination.",
-    "rarity": "Epic",
-    "tokenId": 1,
-  }
-])
-
+const collections = ref ([])
 onMounted (async () => {
-  const marketItems = tableData.value
-  marketItems = await marketPlace_contract.fetchMarketItemsUnsold();
-  console.log(marketItems);
+  tableData.value = await marketPlace_contract.fetchMarketItemsUnsold();
+  console.log(tableData.value);
+
+  collections.value = await nftFactory_contract.getAllDeployedNFTCollections();
+  console.log(collections.value, "collecton");
 
 })
 </script>

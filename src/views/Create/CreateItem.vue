@@ -83,9 +83,8 @@ import {ethers} from 'ethers';
 import { useRoute } from 'vue-router';
 
 const router = useRoute()
-
 const dialog = ref(false)
-
+const nftMyCollection_contract = ref()
 
 let {signer, marketPlace_contract} = getSignerContract();
 
@@ -96,11 +95,6 @@ const description = ref('');
 const symbolCID = ref('')
 const price = ref()
 
-// const nftMyCollection_Address = router?.params?.nftMyCollection_contract
-
-const nftMyCollection_Address = ref("0x6E238B3e8e38Bf93fE9bb3c1f14F5939539051c0");
-
-const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
 
 const setFilePath = ($event) => {
     fileString.value = $event.target.files[0]
@@ -144,7 +138,7 @@ const MintItem = async () => {
         let tokenURI = await getItemCID();
         console.log(tokenURI);
 
-        const tokenURIReturned = await nftMyCollection_contract.createToken(
+        const tokenURIReturned = await nftMyCollection_contract.value.createToken(
             tokenURI
         )
         console.log(tokenURIReturned);
@@ -164,7 +158,7 @@ const MintItem = async () => {
 
         if (tokenId) {
             const mintItem = await marketPlace_contract.createMarketItem(
-                nftMyCollection_Address.value,
+                router?.params?.nftAddress,
                 tokenId,
                 price.value
             )
@@ -186,35 +180,14 @@ const MintItem = async () => {
             console.error('Error creating token for item');
         }
 
-
-        
-        
-        
-
-        // let decodedData = new ethers.utils.Interface(nftMyCollection_ABI).decodeFunctionResult('createToken', encodedData)  
-        
-        // console.log(decodedData);
-
-        // // Ensure that deployedContractAddress is not null or undefined before routing
-        // if (receipt?.events[0]?.args?.nftContract) {
-        //     await router.push(`/cart/${receipt?.events[0]?.args?.nftContract}`);
-        // } else {
-        //     console.error('Error creating collection: Deployed contract address not returned.');
-        // }
-
-
-
     } catch (error) {
         console.error('Error creating collection:', error);
     }
 }
 
 onMounted(() => {
-    // myNft.value = nftFactory_contract.getNFTCollectionByAddress(
-    //     "0xf6780ab367a1E61a0c3a84EdccD270bF5Fcb6606"
-    // )
-    
-    console.log()
+    nftMyCollection_contract.value = new ethers.Contract(router?.params?.nftAddress, nftMyCollection_ABI, signer);    
+    console.log(router?.params?.nftAddress)
 
 })
 
