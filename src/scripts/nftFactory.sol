@@ -27,6 +27,8 @@ contract MyCollection is ERC721URIStorage {
     string[] public allCollectionTokens;
     mapping (uint256 => string) tokenURIById;
 
+    event tokenCreated(string tokenURI, uint256 itemId);
+
     constructor(string memory name, string memory symbol, string memory _logo, string memory _description) ERC721(name, symbol) {
         logo = _logo;
         description = _description;
@@ -46,6 +48,7 @@ contract MyCollection is ERC721URIStorage {
         allCollectionTokens.push(tokenURI); // Add the new token ID to the array
         tokenURIById[newItemId] = tokenURI; // Store the token URI in the mapping
         setApprovalForAll(marketContractAddress, true); //grant transaction permission to marketplace
+        emit tokenCreated(tokenURI, newItemId);
 
         return newItemId; // Return the new token ID
     }

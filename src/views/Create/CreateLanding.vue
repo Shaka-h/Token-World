@@ -52,6 +52,9 @@
             <div v-if="activeComponent==='item'"> 
                 <CreateItem />
             </div>
+            <!-- <div v-if="activeComponent==='item'"> 
+                <CollectionList />
+            </div> -->
         </div>
     </div>
 </template>
@@ -59,8 +62,9 @@
 <script setup>
 import { ref } from 'vue';
 import CreateCollection from './CreateCollection.vue';
-import CreateItem from './CreateItem.vue';
+import CollectionList from './CollectionList.vue';
 import NavBar from '@/components/NavBar.vue';
+import CreateItem from './CreateItem.vue';
  
 
 const activeComponent = ref('collection');

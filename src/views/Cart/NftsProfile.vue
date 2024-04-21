@@ -1,6 +1,12 @@
 <template>
-    <div class="px-4 pb-4">
+    <div class="px-4 pb-4">{{ tableData }}
+
+        <add-edit-sponsor-testimonials :open-dialog="addEditTestimonials"  @close-dialog="addEditTestimonials = false;"></add-edit-sponsor-testimonials>
+
         <div class="flex justify-end mt-4 space-x-3">
+            <div @click="goBack" class="bg-primary2 text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+                Mint Item
+            </div>
             <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Back
             </div>
@@ -30,7 +36,7 @@
 
                 <div style="width: 50%"> 
                     <div class="font-bold">My Items</div>
-                    <simple-table :columns="columns" :table-data="tableData" :has-search="false">
+                    <simple-table :columns="columns" :table-data="tokens" :has-search="false">
                         <template v-slot:actions="{itemData}">
                           <div class="">
                             <div class="flex items-center">
@@ -51,15 +57,51 @@
 
 <script setup>
 import NavBar from '@/components/NavBar.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import {getSignerContract} from '../../scripts/ContractUtils';
-let {nftFactory_contract, nftMyCollection_contract} = getSignerContract();
-import {ipfsGateway} from "../../scripts/ContractConstants";
+import {ipfsGateway, nftMyCollection_ABI} from "../../scripts/ContractConstants";
+import {ethers} from 'ethers';
 
 
-const router = useRoute()
+let {nftFactory_contract, signer} = getSignerContract();
+const nftMyCollection_Address = ref("0x6487069Fc424124c46F1aaEA64344CDA2eC78A00");
+
+const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
+
+const router = useRouter()
+
+const tokens = ref([])
+const tokensData = ref([])
+
+
+const tableData = computed(() => {
+    return tokens.value.map((tokenIndex) => {
+        return {
+            url: `http://127.0.0.1:8080/ipfs/${tokenIndex}`
+        };
+    });
+});
+
+const fetchData = async () => {
+    const responseData = []; // Array to store response data
+    for (const item of tableData.value) {
+        try {
+            const response = await fetch(item.url);
+            const data = await response.json();
+            responseData.push(data); // Push data to responseData array
+            console.log('Data for', item.url, ':', data);
+            // Handle data as needed
+        } catch (error) {
+            console.error('Error fetching data from', item.url, ':', error);
+            // Handle error
+        }
+    }
+    return responseData; // Return the array of response data
+};
+
+
 
 const qty = ref(1);
 const viewProduct = (item) => {
@@ -70,61 +112,30 @@ const viewProduct = (item) => {
 const myNft = ref()
 const logoCID = ref()
 
-onMounted(() => {
-    myNft.value = nftFactory_contract.getNFTCollectionByAddress(
-        router?.params?.nftAddress
-    )    
+onMounted(async () => {
+    // Get details of the nft
+    // myNft.value = nftFactory_contract.getNFTCollectionByAddress(
+    //     "0xf6780ab367a1E61a0c3a84EdccD270bF5Fcb6606"
+    // )
+
+    // Get all tokens in this collection
+    tokens.value  = await nftMyCollection_contract.getAllCollectionTokens();
+    
+
+    console.log(tokens.value );
+    tokensData.value = fetchData().then((responseData) => {
+    console.log('All response data:', responseData);
+    // Further processing of responseData
+});
+    
+
 })
 
 const columns = ref({
+    "image": " ",
     "itemName": "Item Name",
-    "quantity": "Supply",
-    "price": "Price",
+    "description": "Description",
 })
-const tableData = ref([
-    {
-        "itemName": "Sady luki tshirts",
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "price": 120000,
-        "tokenId": 1
-    },
-    {
-        "itemName": "Sady luki tshirts",
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "price": 120000,
-        "tokenId": 1
-    },
-    {
-        "itemName": "Sady luki tshirts",
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "price": 120000,
-        "tokenId": 1
-    },
-    {
-        "itemName": "Sady luki tshirts",
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "price": 120000,
-        "tokenId": 1
-    },
-    {
-        "itemName": "Sady luki tshirts",
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "price": 120000,
-        "tokenId": 1
-    },
-    {
-        "itemName": "Sady luki tshirts",
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "price": 120000,
-        "tokenId": 1
-    },
-])
 
 </script>
  

@@ -4,11 +4,11 @@
             <div class="font-bold text-1xl"><span class="mr-2">*</span>Logo Image</div>
             <div class="flex flex-col space-y-2"> 
                 <div class="border rounded-lg items-center justify-center flex ">
-                    <input type="file" @change="setFilePath($event)" class=" h-32 p-2 border m-2" />
+                    
                     <div class="border w-full p-3 m-3">image
                         <div>Upload the logo image of your collection</div>
-
                     </div>
+                    <input type="file" @change="setFilePath($event)" class="" />
                 </div>
             </div>
         </div>
@@ -84,6 +84,8 @@ const CreateCollection = async () => {
 
         // wait() function allows to wait for transaction to be completed
         let receipt = await deployedContractAddress.wait()  
+
+        console.log(receipt);
 
         // not decodeFunctionData
         // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
