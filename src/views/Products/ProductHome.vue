@@ -48,8 +48,12 @@ import NavBar from '@/components/NavBar.vue'
 import Nav2 from '@/components/Nav2.vue'
 import SearchBar from '@/components/SearchBar.vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import {getSignerContract} from '../../scripts/ContractUtils';
+
+let {marketPlace_contract} = getSignerContract();
+
 
 const viewAllCollections = ref(false)
 const viewAllProducts = ref(false)
@@ -91,38 +95,7 @@ const gobackItem = () => {
   }
 }
 
-const tableData = ref([
-  {
-    "itemName": 'Iphone 14',
-    "owner": 'Brian Makene',
-    "price": "25000 Atsh",
-    "tokenId": 1,
-  },
-  {
-    "itemName": 'Iphone 14',
-    "owner": 'Brian Makene',
-    "price": "25000 Atsh",
-    "tokenId": 1,
-  },
-  {
-    "itemName": 'Iphone 14',
-    "owner": 'Brian Makene',
-    "price": "25000 Atsh",
-    "tokenId": 1,
-  },
-  {
-    "itemName": 'Iphone 14',
-    "owner": 'Brian Makene',
-    "price": "25000 Atsh",
-    "tokenId": 1,
-  },
-  {
-    "itemName": 'Iphone 14',
-    "owner": 'Brian Makene',
-    "price": "25000 Atsh",
-    "tokenId": 1,
-  },
-]);
+const tableData = ref([])
 
 const collections = ref ([
   {
@@ -163,4 +136,10 @@ const collections = ref ([
   }
 ])
 
+onMounted (async () => {
+  const marketItems = tableData.value
+  marketItems = await marketPlace_contract.fetchMarketItemsUnsold();
+  console.log(marketItems);
+
+})
 </script>

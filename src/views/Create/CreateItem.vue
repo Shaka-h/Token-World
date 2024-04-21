@@ -98,7 +98,7 @@ const price = ref()
 
 // const nftMyCollection_Address = router?.params?.nftMyCollection_contract
 
-const nftMyCollection_Address = ref("0x6487069Fc424124c46F1aaEA64344CDA2eC78A00");
+const nftMyCollection_Address = ref("0x6E238B3e8e38Bf93fE9bb3c1f14F5939539051c0");
 
 const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
 
@@ -143,28 +143,41 @@ const MintItem = async () => {
     try {
         let tokenURI = await getItemCID();
         console.log(tokenURI);
-        await nftMyCollection_contract.setMarketContractAddress(marketPlace.value)
 
         const tokenURIReturned = await nftMyCollection_contract.createToken(
             tokenURI
         )
+        console.log(tokenURIReturned);
 
         let receipt = await tokenURIReturned.wait()
 
         console.log(receipt);
+        console.log(receipt?.events[3].args.tokenURI);
+        console.log(receipt?.events[3].args.itemId);
+        
+        const tokenIdBigNumber = receipt?.events[3].args.itemId;
 
-        if (receipt?.events[0].args.tokenId) {
+        // Convert BigNumber to JavaScript number
+        const tokenId = tokenIdBigNumber.toNumber();
+
+        console.log(tokenId);
+
+        if (tokenId) {
             const mintItem = await marketPlace_contract.createMarketItem(
                 nftMyCollection_Address.value,
-                receipt?.events[0]?.args?.nftContract,
+                tokenId,
                 price.value
             )
 
             console.log(mintItem);
-            let mintedItemREturned = await mintItem.wait()
+            let mintedItemReturned = await mintItem.wait()
+            console.log(mintedItemReturned?.events[1].args.itemId);
 
-            if (mintedItemREturned?.events[0]?.args?.itemId) {
-                await router.push(`/item/${mintedItemREturned?.events[0]?.args?.itemId}`);
+            const itemIdBigNumber = mintedItemReturned?.events[1].args.itemId
+            const itemId = itemIdBigNumber.toNumber()
+
+            if (itemId) {
+                window.location.reload();
             } else {
                 console.error('Error creating Item on market');
             }

@@ -27,7 +27,7 @@
   <script setup>
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';
-  import {connectWallet} from "@/scripts/WalletConnection.js";
+  import {walletAddressConnected} from "@/scripts/ContractConstants";
 
   
   const router = useRouter();
@@ -39,11 +39,46 @@
   
   const handleComponentClick = (id) => {
     activeComponent.value = id;
+    
     if (id === 'home') {
       router.push('/'); 
     }
+
     else {
-      connectWallet()
+      // Check if MetaMask is installed
+      if (typeof window.ethereum !== 'undefined') {
+          const provider = window.ethereum;
+
+          // Check if MetaMask is connected to the network
+          if (provider.networkVersion !== null || provider.chainId !== null) {
+              // Request access to the user's accounts
+              provider.request({ method: 'eth_requestAccounts' })
+              .then((accounts) => {
+                  walletAddressConnected.value = accounts[0];
+                  console.log('Connected with account:', walletAddressConnected.value);
+
+                  // Now you can use userAccount to interact with the blockchain
+              })
+              .catch((error) => {
+                  console.error('Error connecting to wallet:', error);
+              });
+
+              // Listen for account changes
+              provider.on('accountsChanged', (accounts) => {
+                  console.log('Account changed to:', accounts[0]);
+              });
+
+              // Listen for network changes
+              provider.on('chainChanged', (chainId) => {
+                  console.log('Network changed to:', chainId);
+              });
+          } else {
+              console.error('MetaMask is not connected to the Ethereum network.');
+          }
+      } else {
+          console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
+      }
+
     }
   };
 

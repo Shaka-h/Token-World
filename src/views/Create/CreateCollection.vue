@@ -43,6 +43,8 @@ import { ref } from 'vue';
 import {getSignerContract} from '../../scripts/ContractUtils';
 import addMetadata  from '@/scripts/IPFS'
 import router from '@/router';
+import {marketPlace } from '@/scripts/ContractConstants'
+
 
 
 let {nftFactory_contract} = getSignerContract();
@@ -75,6 +77,7 @@ const CreateCollection = async () => {
         await uploadLogo();
 
         const deployedContractAddress = await nftFactory_contract.deployNFTContract(
+            marketPlace,
             name.value,
             symbol.value,
             logoCID.value,

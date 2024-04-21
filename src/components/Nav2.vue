@@ -1,7 +1,8 @@
 <template>
     <div class="flex w-full p-2 justify-between py-3 items-center px-4 bg-primary2">
         <div class="flex space-x-8 w-full"> 
-            <div class="p-2 bg-primary4 border-primary">0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF</div>
+            <div v-if="!walletAddressConnected" class="p-2 bg-primary4 border-primary">NO WALLET ACCOUNT DETECTED</div>
+            <div v-if="walletAddressConnected" class="p-2 bg-primary4 border-primary">{{walletAddressConnected}}</div>
         </div>
         
         <div class="flex space-x-2">
@@ -15,7 +16,7 @@
                 </span>
                 <span class="text">Create</span>
             </div>
-            <div @click="router.push('/cart/1')" class="btn bg-primary4 cursor-pointer">
+            <div v-if="walletAddressConnected" @click="router.push('/cart/1')" class="btn bg-primary4 cursor-pointer">
                 <span class="icon">
                     <svg viewBox="0 0 175 80" width="30" height="30">
                         <rect width="80" height="15" fill="#161616" rx="10"></rect>
@@ -31,6 +32,8 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import {walletAddressConnected} from "@/scripts/ContractConstants";
+
 
 const router = useRouter()
 </script>

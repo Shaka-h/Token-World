@@ -1,10 +1,14 @@
 <template>
-    <div class="px-4 pb-4">{{ tableData }}
-
+    <div class="px-4 pb-4">{{ address }}
+        {{ tokens }}
+{{ myNft }}
+        <div v-if="showMint"> 
+            <CreateItem />
+        </div>
         <add-edit-sponsor-testimonials :open-dialog="addEditTestimonials"  @close-dialog="addEditTestimonials = false;"></add-edit-sponsor-testimonials>
 
         <div class="flex justify-end mt-4 space-x-3">
-            <div @click="goBack" class="bg-primary2 text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+            <div @click="showMint = true" class="bg-primary2 text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Mint Item
             </div>
             <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
@@ -19,7 +23,7 @@
             <div class="mt-4 flex w-full justify-between"> 
                 <div class="border rounded-lg p-2" style="width: 40%"> 
                     <div class="flex my-2 space-x-4"> 
-                        <div class="font-bold text-2xl">Name</div>
+                        <div class="font-bold text-2xl">{{collection}}Name</div>
                         <div class="font-bold text-2xl">SYM</div>
                     </div>
                     <div class="flex flex-col"> 
@@ -59,18 +63,26 @@
 import NavBar from '@/components/NavBar.vue';
 import { computed, onMounted, ref } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import {getSignerContract} from '../../scripts/ContractUtils';
 import {ipfsGateway, nftMyCollection_ABI} from "../../scripts/ContractConstants";
 import {ethers} from 'ethers';
+import CreateItem from '@/views/Create/CreateItem.vue';
 
+
+const showMint = ref(false)
+
+const router = useRoute()
 
 let {nftFactory_contract, signer} = getSignerContract();
-const nftMyCollection_Address = ref("0x6487069Fc424124c46F1aaEA64344CDA2eC78A00");
+const address = router?.params?.nftAddress
+// const nftMyCollection_Address = address.toString()
+
+const nftMyCollection_Address = ref("0x6E238B3e8e38Bf93fE9bb3c1f14F5939539051c0");
+
 
 const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
 
-const router = useRouter()
 
 const tokens = ref([])
 const tokensData = ref([])
@@ -114,25 +126,20 @@ const logoCID = ref()
 
 onMounted(async () => {
     // Get details of the nft
-    // myNft.value = nftFactory_contract.getNFTCollectionByAddress(
-    //     "0xf6780ab367a1E61a0c3a84EdccD270bF5Fcb6606"
-    // )
+    myNft.value = await nftFactory_contract.getNFTCollectionByAddress(
+        address
+    )
 
     // Get all tokens in this collection
     tokens.value  = await nftMyCollection_contract.getAllCollectionTokens();
     
 
-    console.log(tokens.value );
-    tokensData.value = fetchData().then((responseData) => {
-    console.log('All response data:', responseData);
-    // Further processing of responseData
-});
     
 
 })
 
 const columns = ref({
-    "image": " ",
+    "image": "Image",
     "itemName": "Item Name",
     "description": "Description",
 })
