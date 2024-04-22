@@ -7,7 +7,7 @@
                 Back
             </div>
         </div>
-        <div> 
+        <div>
             <div class="flex" style="height: 60vh"> 
     
     
@@ -34,7 +34,7 @@
                          </div>
          
                          <div class="mt-4">Token Id: <span class="ml-2">{{ itemMarketDetails[2]?.hex }}</span></div>
-                         <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[7]?.hex }}</span></div>
+                         
                          <div>Number of Offerings:<span class="ml-2">????</span></div>
                          <div class="flex flex-col mt-2"> 
                             <div>Owner:</div>
@@ -45,6 +45,7 @@
          
                      <div class="flex flex-col  p-2 border mx-2 mt-3 rounded-lg"> 
                          <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Atsh </div>
+                         <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[7]?.hex }}</span></div>
                          
                          <div class="space-x-2 mt-4"> 
                              <label>My Offer</label>
@@ -64,13 +65,43 @@
     
             <div class="mt-8"> 
                 <div class="flex justify-between"> 
-                    <div class="font-bold text-xl">Offerings</div>
+                    <div class="font-bold text-xl">Offers</div>
                     <div class="border py-1 px-4 bg-primary text-white rounded-lg cursor-pointer">Close Auction</div>
                 </div>
                 <div> 
-                    <simple-table :columns="columns" :table-data="tableData" :has-search="false">
-                       
-                      </simple-table>
+                    <table class="table table-report">
+                        <thead>
+                        <tr>
+                          <th class="whitespace-nowrap">No</th>
+                          <th class="whitespace-nowrap" v-for="(column, index) in columns" :key="index">
+                            {{ column }}
+                          </th>
+                          <th class="whitespace-nowrap" v-if="hasActions">{{ actions }}</th>
+                        </tr>
+                        </thead>
+                        <tbody v-if="offersMadeToItem?.length === 0">
+                        <tr>
+                          <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="skeleton">
+                            <div class="h-4"></div>
+                          </td>
+                        </tr>
+                        </tbody>
+                        <tbody v-if="!offersMadeToItem?.length">
+                        <tr>
+                          <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="text-center p-2">
+                            <span class="font-semibold text-base">{{ "NO ITEMS AVAILABLE" }}</span>
+                          </td>
+                        </tr>
+                        </tbody>
+                        <tbody v-if="offersMadeToItem?.length">
+                          <tr class="intro-x" v-for="(data, index) of offersMadeToItem" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ data[2].hex }}</td>
+                            <td>{{ data[3] }}</td>
+                            <td>{{ data[5].hex }}</td>
+                        </tr>
+                        </tbody>
+                      </table>
                 </div>
             </div>
         </div>
@@ -99,48 +130,14 @@ const offer = ref(0);
 
 const itemDetails = ref();
 const itemMarket = ref([]);
+const offerMade = ref([])
+const getOffersMade = ref([])
 
 const columns = ref({
     "biddingPrice": "Bidding Price",
-    "from": "From"
+    "from": "From",
+    "offerId": "Offer Id"
 })
-const tableData = ref([
-    {
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "floorDifference": "12% Below",
-        "expiration": "in 12hrs",
-        "from": "0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF",
-    },
-    {
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "floorDifference": "12% Below",
-        "expiration": "in 12hrs",
-        "from": "0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF",
-    },
-    {
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "floorDifference": "12% Below",
-        "expiration": "in 12hrs",
-        "from": "0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF",
-    },
-    {
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "floorDifference": "12% Below",
-        "expiration": "in 12hrs",
-        "from": "0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF",
-    },
-    {
-        "unitPrice": "12000 Atsh",
-        "quantity": 2,
-        "floorDifference": "12% Below",
-        "expiration": "in 12hrs",
-        "from": "0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF",
-    },
-])
 
 const fetchData = async () => {
     const responseData = []; // Array to store response data
@@ -169,7 +166,18 @@ const itemMarketDetails = computed(() => {
   });
 });
 
-
+const offersMadeToItem = computed(() => {
+    return getOffersMade.value.map(eachOffer => {
+    return eachOffer.map(offer => {
+        if (typeof offer === 'object' && offer._isBigNumber) {
+        return { ...offer, hex: parseInt(offer._hex) };
+        } 
+        else {
+        return offer;
+        }
+    });
+    });
+});
 
 onMounted(async () => {
     itemDetails.value = await nftMyCollection_contract.getTokenURIById(router?.params?.tokenId);
@@ -185,13 +193,28 @@ onMounted(async () => {
     // for (const item of itemMarket.value) {
     //   console.log(typeof item, "itemmmmmm", item._isBigNumber); 
     // }
+    getOffersMade.value = await marketPlace_contract.getAllOffersMade(router?.params?.tokenId);
+    console.log(getOffersMade.value, "All offers made"); 
 
-
+    for (const offer of getOffersMade.value) {
+        for (const offerDetail of offer) {
+            console.log(offerDetail); 
+        }
+    }
 });
 
 const makeOffer = async () => {
-    itemMarket.value = await marketPlace_contract.makeOffer(router?.params?.tokenId, offer.value);
-    console.log(itemMarket.value, "offer made"); 
+    let receipt = await marketPlace_contract.makeOffer(router?.params?.tokenId, offer.value);
+    offerMade.value = await receipt.wait()
+    console.log(offerMade.value, "offer made"); 
+    window.location.reload();
+
+    for (const offer of offerMade.value) {
+        for (offerDetail of offer) {
+            console.log(typeof offerDetail, "itemmmmmm"); 
+        }
+    }
+
 }
 
 

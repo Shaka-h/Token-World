@@ -5,7 +5,7 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const marketPlace = "0xF90A9e050ad547a5cdb613Ce072C7e133FfdADd4"
+export const marketPlace = "0xF158AdD3F4e1bbb43343a0c76E43eb457430a2A3"
 
 export const marketPlace_ABI = [
 	{
@@ -462,7 +462,7 @@ export const marketPlace_ABI = [
 ]
 
 
-export const nftFactory_Address = "0x8dEF056406ef699A2b4cc8584ccAfD0C69Ca2456"
+export const nftFactory_Address = "0x822566573039548B5674Ac62E249a551165e03A3"
 export const nftFactory_ABI = [
 	{
 		"anonymous": false,

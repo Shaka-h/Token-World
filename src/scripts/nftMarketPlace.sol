@@ -126,7 +126,7 @@ contract NFTMarket is ReentrancyGuard {
         offersMadeToItem[itemID].push(Offer({
             nftContract: nftContractAddress, // Use the correct nftContractAddress
             itemID: itemID,
-            offerPrice: msg.value,
+            offerPrice: offerPrice,
             offerer: payable(msg.sender),
             offerAccepted: true,
             offerID: _offerID.current()
