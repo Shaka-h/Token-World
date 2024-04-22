@@ -8,7 +8,7 @@
             </div>
         </div>
         <div>
-            <div class="flex" style="height: 60vh"> 
+            <div class="flex " style="height: 60vh"> 
     
     
                 <div class="flex items-center justify-center border m-2 rounded-lg" style="width: 40%"> 
@@ -35,7 +35,7 @@
          
                          <div class="mt-4">Token Id: <span class="ml-2">{{ itemMarketDetails[2]?.hex }}</span></div>
                          
-                         <div>Number of Offerings:<span class="ml-2">????</span></div>
+                         <div>Number of Offers:<span class="ml-2">{{ offersMadeToItem?.length }}</span></div>
                          <div class="flex flex-col mt-2"> 
                             <div>Owner:</div>
                             <div>{{ itemMarketDetails[3] }}</div>
@@ -66,7 +66,7 @@
             <div class="mt-8"> 
                 <div class="flex justify-between"> 
                     <div class="font-bold text-xl">Offers</div>
-                    <div class="border py-1 px-4 bg-primary text-white rounded-lg cursor-pointer">Close Auction</div>
+                    <div @click="closeAuction()" class="border py-1 px-4 bg-primary text-white rounded-lg mb-4 cursor-pointer">Close Auction</div>
                 </div>
                 <div> 
                     <table class="table table-report">
@@ -216,6 +216,15 @@ const makeOffer = async () => {
     }
 
 }
+
+const closeAuction = async () => {
+    let closeAuction = await marketPlace_contract.acceptOffer(router?.params?.tokenId, router?.params?.collection);
+    const output = await closeAuction.wait()
+    console.log(output, "offer made"); 
+    window.location.reload();
+
+}
+
 
 
 </script>
