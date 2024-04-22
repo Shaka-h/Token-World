@@ -5,7 +5,7 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const marketPlace = "0xae56DC9F021731cC902A4207919165451f8430c3"
+export const marketPlace = "0x9551AE61B4FDB4410bBD9326F406eacc58dc0a48"
 
 export const marketPlace_ABI = [
 	{
@@ -462,8 +462,47 @@ export const marketPlace_ABI = [
 ]
 
 
-export const nftFactory_Address = "0xceA7eec777c8e833265F662790154060bFc9F382"
+export const nftFactory_Address = "0x5CC451D6C6588b26Eb1f4810FCFcb08b946D2145"
 export const nftFactory_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_marketContractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_logo",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			}
+		],
+		"name": "deployNFTContract",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"anonymous": false,
 		"inputs": [
@@ -549,45 +588,6 @@ export const nftFactory_ABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_marketContractAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_logo",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_description",
-				"type": "string"
-			}
-		],
-		"name": "deployNFTContract",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

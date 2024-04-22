@@ -1,19 +1,24 @@
 <template>
-  <main class="bg-primary">
+  <main class="backgroundstyle" style="">
     <NavBar />
-    <div class="items-center w-full h-full mt-20 flex flex-col">
-      <div class="heading flex items-center text-center">AUCTION GALAXY</div>
-      <div class="heading2"> 
-        Explore our token world with your Atsh
+    <div class="w-full h-full ml-20 mt-20 flex flex-col">
+      <div class="heading flex text-center">AUCTION GALAXY</div>
+      <div class="heading2 w-1/2"> 
+        Bid, collect, and invest in the future of digital art with confidence, knowing that each NFT is authenticated, secure, and backed by blockchain technology.
       </div>
-      <div class="w-full"> 
-        <div class="cards justify-evenly p-10">
+      <div class="w-full ml-10"> 
+        <div class="cards justify-evenly py-10">
              <div @click="router.push('/Products')" class="card primary">
-              <strong class="mb-10 text-2xl">EXPLORE</strong>
-              <div>Create your collection where you can mint your items and exchange as NFT tokens</div>
+              <div></div>
+              Explore the world of digital treasures with this exclusive NFT auction platform. 
+              <div>Start by creating your collection where you can mint your items and exchange as NFT tokens</div>
               <div>With NFTs begin your asset investments by investing in real estates, stocks, bonds ,etc represented as NFTs</div>
               <div>Benefit different services offered by service providers represented as NFTs such as special membership</div>
+              Each piece is a limited edition masterpiece, waiting to be owned by a passionate collector like you
             </div>
+            <!-- <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg> -->
         </div>
       </div>
     </div>
@@ -47,27 +52,35 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.backgroundstyle{
+  background-image: url('../../public/background1.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .heading{
   font-size: 100px;
   font-family: 'Platypi';
   color: #84A7A1;
 }
 .heading2{
-  font-size: 50px;
+  font-size: 30px;
   font-weight: 100px;
   font-family: 'Platypi';
   font-style: italic;
   color: #84A7A1;
+  text-align: center;
 }
 
 .cards {
-  display: flex;
   flex-direction: row;
   gap: 15px;
 }
 
 .cards .primary {
   background-color: #84A7A1;
+  background: linear-gradient(-45deg, #1F6E8C 0%,#84A7A1, #0D1042 100% );
+
 }
 
 .cards .red {
@@ -109,7 +122,7 @@ onMounted(() => {
 }
 
 .cards:hover > .card:not(:hover) {
-  filter: blur(10px);
+  filter: blur(2px);
   transform: scale(0.9, 0.9);
 }
 </style>

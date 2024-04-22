@@ -1,37 +1,8 @@
 <template>
-    <!-- <div class="text-center pa-4">
-        <v-dialog
-          v-model="dialog"
-          max-width="400"
-          persistent
-        >
-          <template v-slot:activator="{ props: activatorProps }">
-            <v-btn v-bind="activatorProps">
-              Open Dialog
-            </v-btn>
-          </template>
-    
-          <v-card
-            prepend-icon="mdi-map-marker"
-            text="Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running."
-            title="Use Google's location service?"
-          >
-            <template v-slot:actions>
-              <v-spacer></v-spacer>
-    
-              <v-btn @click="dialog = false">
-                Disagree
-              </v-btn>
-    
-              <v-btn @click="dialog = false">
-                Agree
-              </v-btn>
-            </template>
-          </v-card>
-        </v-dialog>
-      </div> -->
-
-        <div>
+           <div class="w-1/2 p-10" style="background-color: rgb(245, 237, 237);">
+            <div class="flex justify-end mt-4">
+                <div class="p-2 border bg-danger text-white hover:p-3 cursor-pointer rounded-lg" @click="closeDialog()">Cancel</div>
+            </div>
             <div class="flex flex-col space-y-2"> 
                 <div><span class="mr-2">*</span>Image</div>
                 <div class="border rounded-lg items-center justify-center flex ">
@@ -40,7 +11,7 @@
                         <div>Upload the file representation of your item</div>
         
                     </div>
-                    <input type="file" @change="setFilePath($event)" class=" " />
+                    <input type="file" @change="setFilePath($event)" class="" />
                 </div>
             </div>
             <div class="mt-4">
@@ -85,6 +56,7 @@ import { useRoute } from 'vue-router';
 const router = useRoute()
 const dialog = ref(false)
 const nftMyCollection_contract = ref()
+const emits = defineEmits(['cancel'])
 
 let {signer, marketPlace_contract} = getSignerContract();
 
@@ -95,6 +67,9 @@ const description = ref('');
 const symbolCID = ref('')
 const price = ref()
 
+const closeDialog = () => {
+  emits('cancel')
+}
 
 const setFilePath = ($event) => {
     fileString.value = $event.target.files[0]

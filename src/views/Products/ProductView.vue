@@ -2,7 +2,7 @@
     <NavBar />
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
-            <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">My Offers</div>
+            <!-- <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">My Offers</div> -->
             <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Back
             </div>
@@ -19,7 +19,7 @@
                     <div class="ml-2 mt-2 font-bold text-2xl">{{itemData[0]?.name}}</div>
 
                     <div class="flex h-full">
-                     <div class="flex flex-col p-2 border mx-2 mt-3 rounded-lg"> 
+                     <div class="flex flex-col p-2 border mx-2 mt-3 w-1/2 rounded-lg"> 
                          <div>
                              <span>Collection:</span>
                              <span class="ml-4">SHAKA</span>
@@ -43,7 +43,7 @@
                      </div>
          
          
-                     <div class="flex flex-col  p-2 border mx-2 mt-3 rounded-lg"> 
+                     <div class="flex flex-col w-1/2 p-2 border mx-2 mt-3 rounded-lg"> 
                          <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Atsh </div>
                          <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[7]?.hex }}</span></div>
                          

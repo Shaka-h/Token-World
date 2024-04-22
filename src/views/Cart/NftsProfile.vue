@@ -1,14 +1,12 @@
 <template>
     <div class="px-4 pb-4">
        
-        <div v-if="showMint"> 
-            <CreateItem />
+        <div class="w-full  flex justify-center items-center rounded-lg py-10"> 
+            <CreateItem  @cancel="showMint = false" v-if="showMint"/>
         </div>
-        <!-- <CreateItem :open-dialog="showMint" @close-dialog="showMint = false;"></CreateItem> -->
 
-
-        <div class="flex justify-end mt-4 space-x-3">
-            <div @click="showMint = true" class="bg-primary2 text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+        <div v-if="!showMint" class="flex justify-end mt-4 space-x-3">
+            <div  @click="showMint = true" class="bg-primary2 text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Mint Item
             </div>
             <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
@@ -18,10 +16,10 @@
     
         <div> 
             <div class="font-bold"> 
-                My Collection
+                Collection
             </div>
             <div class="mt-4 flex w-full justify-between"> 
-                <div v-if="myNft?.length" class="border rounded-lg p-2" style="width: 40%"> 
+                <div v-if="myNft?.length" class="border rounded-lg p-2 " style="width: 40%;"> 
                     <div class="flex my-2 space-x-4"> 
                         <div class="font-bold text-2xl">{{myNft[2]}}</div>
                         <div class="font-bold text-2xl">{{myNft[3]}}</div>
@@ -38,7 +36,7 @@
                 </div>
 
                 <div style="width: 50%"> 
-                    <div class="font-bold">My Items</div>
+                    <div class="font-bold">Items</div>
                     <simple-table :columns="columns" :table-data="tokensData" :has-search="false">
                         <template v-slot:actions="{itemData}">
                           <div class="">
@@ -99,8 +97,8 @@ const tokensData = ref([])
 
 const viewProduct = (item) => {
     console.log(item);
-  console.log(item.tokenId)
-  router.push(`/item/${item.tokenId}`)
+//   console.log(item.tokenId)
+//   router.push(`/item/${item.tokenId}`)
 }
 
 const fetchData = async () => {
@@ -141,4 +139,15 @@ onMounted(async () => {
 })
 
 </script>
+
+<style scoped>
+.mint{
+    height: 100%;
+    
+}
+
+.mintNot{
+    height:0%
+}
+</style>
  

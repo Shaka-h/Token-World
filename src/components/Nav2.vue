@@ -16,7 +16,7 @@
                 </span>
                 <span class="text">Create</span>
             </div>
-            <div v-if="walletAddressConnected" @click="router.push('/cart/1')" class="btn bg-primary4 cursor-pointer">
+            <!-- <div v-if="walletAddressConnected" @click="router.push('/cart/1')" class="btn bg-primary4 cursor-pointer">
                 <span class="icon">
                     <svg viewBox="0 0 175 80" width="30" height="30">
                         <rect width="80" height="15" fill="#161616" rx="10"></rect>
@@ -25,7 +25,7 @@
                     </svg>
                 </span>
                 <span class="text">Profile</span>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
