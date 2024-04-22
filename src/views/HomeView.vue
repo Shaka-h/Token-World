@@ -2,7 +2,7 @@
   <main class="bg-primary">
     <NavBar />
     <div class="items-center w-full h-full mt-20 flex flex-col">
-      <div class="heading flex items-center text-center">TOKEN WORLD</div>
+      <div class="heading flex items-center text-center">AUCTION GALAXY</div>
       <div class="heading2"> 
         Explore our token world with your Atsh
       </div>

@@ -1,6 +1,6 @@
 <template>
     <NavBar />
-    <Nav2 />
+    <Nav2 />owner
     <div class="flex w-full p-2 justify-end mt-2">
                 
         <div class="flex">
@@ -40,8 +40,10 @@
             </div>
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{item.name}}</h5>
             <p class="font-normal text-gray-700 dark:text-gray-400">{{item.description}}</p>
-          </div>
-            
+          </div> 
+        </div>
+        <div v-if="!collections?.length" class="flex justify-center w-full mt-8 bg-white p-4"> 
+          <span class="font-semibold text-base">{{ "NO COLLECTIONS AVAILABLE" }}</span>
         </div>
       </div>
     </div>
@@ -71,9 +73,10 @@ const columns = ref({
 })
 const router = useRouter();
 const viewProduct = (item) => {
-  console.log(item.itemId)
+  console.log(item.nftContract)
+  const contract = item.nftContract
   const itemID = item.itemId.toNumber()
-  router.push(`/item/${itemID}`)
+  router.push(`/item/${contract}/${itemID}`)
 }
 const viewCollection = (item) => {
   console.log(item.NftContract)
@@ -107,7 +110,7 @@ const tableData = ref([])
 const collections = ref ([])
 onMounted (async () => {
   tableData.value = await marketPlace_contract.fetchMarketItemsUnsold();
-  console.log(tableData.value);
+  console.log(tableData.value,"token");
 
   collections.value = await nftFactory_contract.getAllDeployedNFTCollections();
   console.log(collections.value, "collecton");

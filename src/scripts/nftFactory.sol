@@ -29,14 +29,12 @@ contract MyCollection is ERC721URIStorage {
 
     event tokenCreated(string tokenURI, uint256 itemId);
 
-    constructor(string memory name, string memory symbol, string memory _logo, string memory _description) ERC721(name, symbol) {
+    constructor(address _marketContractAddress, string memory name, string memory symbol, string memory _logo, string memory _description) ERC721(name, symbol) {
+        marketContractAddress = _marketContractAddress;
         logo = _logo;
         description = _description;
     }
 
-    function setMarketContractAddress (address _marketContractAddress) external {
-        marketContractAddress = _marketContractAddress;
-    }
 
     function createToken(string memory tokenURI) public returns (uint) {
         _tokenIds.increment(); // Increment the token ID counter
@@ -80,8 +78,8 @@ contract NFTFactory {
 
     event NFTDeployed(address indexed owner, address indexed nftContract, string name, string symbol, string logo, string description);
 
-    function deployNFTContract(string memory _name, string memory _symbol, string memory _logo, string memory _description) external returns (address) {
-        MyCollection nftContract = new MyCollection(_name, _symbol, _logo, _description);
+    function deployNFTContract(address _marketContractAddress, string memory _name, string memory _symbol, string memory _logo, string memory _description) external returns (address) {
+        MyCollection nftContract = new MyCollection(_marketContractAddress, _name, _symbol, _logo, _description);
         MyNFTCollection memory newCollection = MyNFTCollection(msg.sender, address(nftContract), _name, _symbol, _logo, _description);
         nftCollectionsByAddress[address(nftContract)] = newCollection;
         collectionsByOwner[msg.sender]  = newCollection;

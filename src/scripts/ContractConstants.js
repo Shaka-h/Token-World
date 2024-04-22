@@ -5,7 +5,7 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const marketPlace = "0x39779de11e7527f827cE00392f3a0585C63e7033"
+export const marketPlace = "0xF90A9e050ad547a5cdb613Ce072C7e133FfdADd4"
 
 export const marketPlace_ABI = [
 	{
@@ -342,6 +342,60 @@ export const marketPlace_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "idMarketItem",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address payable",
+				"name": "nftContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address payable",
+				"name": "seller",
+				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "sold",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "currentBiddingPrice",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "itemID",
 				"type": "uint256"
 			},
@@ -408,7 +462,7 @@ export const marketPlace_ABI = [
 ]
 
 
-export const nftFactory_Address = "0x4fED7335Fd1C007D03de7b367aA1AE64CbaA6906"
+export const nftFactory_Address = "0x8dEF056406ef699A2b4cc8584ccAfD0C69Ca2456"
 export const nftFactory_ABI = [
 	{
 		"anonymous": false,

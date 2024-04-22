@@ -53,7 +53,7 @@
                         <template v-slot:image="{itemData}">
                             <div class="">
                               <div class="flex items-center">
-                                <img :src="'http://127.0.0.1:8080/ipfs/' + itemData.symbolCID"  alt="icon description" class="p-2 h-24">
+                                <img :src="'http://127.0.0.1:8080/ipfs/' + itemData.symbolCID"  alt="icon description" class="p-2 h-16">
                             </div>
                             </div>
                           </template>
@@ -89,12 +89,8 @@ const router = useRoute()
 
 let {nftFactory_contract, signer} = getSignerContract();
 const address = router?.params?.nftAddress
-// const nftMyCollection_Address = address.toString()
 
-const nftMyCollection_Address = ref("0x6E238B3e8e38Bf93fE9bb3c1f14F5939539051c0");
-
-
-const nftMyCollection_contract = new ethers.Contract(nftMyCollection_Address.value, nftMyCollection_ABI, signer);
+const nftMyCollection_contract = new ethers.Contract(router?.params?.nftAddress, nftMyCollection_ABI, signer);
 
 
 const tokens = ref([])
@@ -102,6 +98,7 @@ const tokensData = ref([])
 
 
 const viewProduct = (item) => {
+    console.log(item);
   console.log(item.tokenId)
   router.push(`/item/${item.tokenId}`)
 }

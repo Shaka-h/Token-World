@@ -20,7 +20,7 @@ const router = createRouter({
       component: ProductHome
     },
     {
-      path: '/item/:tokenId',
+      path: '/item/:collection/:tokenId',
       name: 'productDetails',
       component: ProductView
     },

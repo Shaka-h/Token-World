@@ -2,8 +2,12 @@
     <NavBar />
     
     <Nav2 />
-    <div class="flex w-full p-2 justify-end mt-2">
-        
+    <div class="flex justify-end mt-4 space-x-3">
+      <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
+          Back
+      </div>
+  </div>
+    <div class="flex w-full p-2 justify-end mt-2">        
         <div class="flex">
             <search-bar />
         </div>
@@ -22,11 +26,7 @@
           </div>
         </template>
         <template v-slot:image="{itemData}">
-            <div class="">
-              <div class="flex items-center">
-                <img :src="'http://127.0.0.1:8080/ipfs/' + itemData.symbolCID"  alt="icon description" class="p-2 h-24">
-            </div>
-            </div>
+                <img :src="'http://127.0.0.1:8080/ipfs/' + itemData.symbolCID"  alt="icon description" class="p-2 h-16">
           </template>
     </simple-table>
     </div>
@@ -38,18 +38,25 @@ import Nav2 from '@/components/Nav2.vue'
 import SearchBar from '@/components/SearchBar.vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import {ethers} from 'ethers';
+import {nftMyCollection_ABI} from "@/scripts/ContractConstants";
+import {getSignerContract} from '@/scripts/ContractUtils';
 
 const columns = ref({
-  "itemName": 'item Name',
-  "owner": 'owner',
-  "price": 'price',
+    "image": "Image",
+    "name": "Item Name",
+    "description": "Description",
 })
-const router = useRouter();
+
+const router = useRoute();
 const viewProduct = (item) => {
-  console.log(item.tokenId)
-  router.push(`/item/${item.tokenId}`)
+  console.log(item)
+  // router.push(`/item/${item.tokenId}`)
 }
+let {nftFactory_contract, signer} = getSignerContract();
+
+const nftMyCollection_contract = new ethers.Contract(router?.params?.collectionId, nftMyCollection_ABI, signer);
 
 const tokens = ref([])
 
@@ -75,6 +82,10 @@ const fetchData = async () => {
 
 
 onMounted(async () => {
+  // Get all tokens in this collection
+  tokens.value  = await nftMyCollection_contract.getAllCollectionTokens();
+
+  console.log(tokens.value , "token");
   await fetchData().then((responseData) => {
         console.log('All response data:', responseData);
         tokensData.value = responseData

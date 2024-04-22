@@ -31,7 +31,7 @@ contract NFTMarket is ReentrancyGuard {
     }
 
     //a way to access values of the MarketItem struct above by passing an integer of the itemID
-    mapping(uint256 => MarketItem) private idMarketItem;
+    mapping(uint256 => MarketItem) public idMarketItem;
 
     //log message (when Item is sold)
     event MarketItemCreated (
@@ -96,7 +96,7 @@ contract NFTMarket is ReentrancyGuard {
 
     function makeOffer(uint256 itemID, uint256 offerPrice) public payable nonReentrant {
         require(offerPrice > idMarketItem[itemID].currentBiddingPrice, "Offer price must be greater than the current bidding price");
-        require(msg.value == offerPrice, "Please submit the offer price in order to complete making an offer");
+        // require(msg.value == offerPrice, "Please submit the offer price in order to complete making an offer");
 
 
          // seller cannot make offer
