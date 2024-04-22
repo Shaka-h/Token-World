@@ -10,6 +10,11 @@ This template should help get you started developing with Vue 3 in Vite.
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
+<video width="320" height="240" controls>
+  <source src="./public/PRESENTATION.webm" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 See [presentation](/public/PRESENTATION.webm).
 
 ## Project Setup
