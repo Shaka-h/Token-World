@@ -20,10 +20,7 @@
 
                     <div class="flex h-full">
                      <div class="flex flex-col p-2 border mx-2 mt-3 w-1/2 rounded-lg"> 
-                         <div>
-                             <span>Collection:</span>
-                             <span class="ml-4">SHAKA</span>
-                         </div>
+                         
                          <div class="flex flex-col "> 
                              <div>Creator:</div>
                              <div>{{ itemMarketDetails[3] }}</div>
@@ -38,13 +35,15 @@
                          <div>Number of Offers:<span class="ml-2">{{ offersMadeToItem?.length }}</span></div>
                          <div class="flex flex-col mt-2"> 
                             <div>Owner:</div>
-                            <div>{{ itemMarketDetails[3] }}</div>
+                            <div>{{ itemMarketDetails[4] }}</div>
                         </div>
                      </div>
-         
-         
-                     <div class="flex flex-col w-1/2 p-2 border mx-2 mt-3 rounded-lg"> 
-                         <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Atsh </div>
+                     <div v-if="itemMarketDetails[6]"  class="flex flex-col w-1/2 p-2 border items-center justify-center mx-2 bg-green  mt-3 rounded-lg">
+                        <div class="font-bold text-xl p-y2 px-4 m-1 mb-2">ITEM SOLD</div>
+                    </div>
+
+                     <div v-if="!itemMarketDetails[6]" class="flex flex-col w-1/2 p-2 border mx-2 mt-3 rounded-lg"> 
+                         <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Eth </div>
                          <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[7]?.hex }}</span></div>
                          
                          <div class="space-x-2 mt-4"> 
@@ -54,9 +53,10 @@
                          <div> 
                              <input />
                          </div>
-                         <div class="flex space-x-4">
+                         <div >Item Sold</div>
+                         <div  class="flex space-x-4">
                             <div @click="makeOffer()" class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Make Offer</div>
-                         </div>
+                         </div> 
                      </div>
                      
                     </div>
@@ -66,7 +66,7 @@
             <div class="mt-8"> 
                 <div class="flex justify-between"> 
                     <div class="font-bold text-xl">Offers</div>
-                    <div @click="closeAuction()" class="border py-1 px-4 bg-primary text-white rounded-lg mb-4 cursor-pointer">Close Auction</div>
+                    <div v-if="!itemMarketDetails[6]" @click="closeAuction()" class="border py-1 px-4 bg-primary text-white rounded-lg mb-4 cursor-pointer">Close Auction</div>
                 </div>
                 <div> 
                     <table class="table table-report">
@@ -204,7 +204,7 @@ onMounted(async () => {
 });
 
 const makeOffer = async () => {
-    let receipt = await marketPlace_contract.makeOffer(router?.params?.tokenId, offer.value);
+    let receipt = await marketPlace_contract.makeOffer(router?.params?.tokenId, offer.value, { value: offer.value });
     offerMade.value = await receipt.wait()
     console.log(offerMade.value, "offer made"); 
     window.location.reload();
