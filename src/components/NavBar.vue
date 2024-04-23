@@ -48,11 +48,7 @@
       // Check if MetaMask is installed
       if (typeof window.ethereum !== 'undefined') {
           const provider = window.ethereum;
-
-          // Check if MetaMask is connected to the network
-          if (provider.networkVersion !== null || provider.chainId !== null) {
-              // Request access to the user's accounts
-              provider.request({ method: 'eth_requestAccounts' })
+          provider.request({ method: 'eth_requestAccounts' })
               .then((accounts) => {
                   walletAddressConnected.value = accounts[0];
                   console.log('Connected with account:', walletAddressConnected.value);
@@ -72,6 +68,10 @@
               provider.on('chainChanged', (chainId) => {
                   console.log('Network changed to:', chainId);
               });
+          // Check if MetaMask is connected to the network
+          if (provider.networkVersion !== null || provider.chainId !== null) {
+              // Request access to the user's accounts
+             
           } else {
               console.error('MetaMask is not connected to the Ethereum network.');
           }
