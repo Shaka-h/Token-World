@@ -28,7 +28,7 @@ npm run dev
 npm run build
 ```
 
-### SETTING UP IPFS WITH THE FOLLOWING COMMANDS
+### Settng up IPFS with the following commands 
 
 install ipfs 
 
@@ -42,8 +42,8 @@ sudo bash install.sh
 
 ipfs --version
 
-### INITIALIZE IPFS
+### Initialize IPFS
  ipfs init
 
-### RUN IPFS NODE LOCALLY
+### Run IPFS node locally
 ipfs daemon
