@@ -27,3 +27,18 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### SETTING UP IPFS WITH THE FOLLOWING COMMANDS
+
+install ipfs 
+wget https://dist.ipfs.tech/kubo/v0.28.0/kubo_v0.28.0_linux-amd64.tar.gz
+tar -xvzf kubo_v0.28.0_linux-amd64.tar.gz
+cd kubo
+sudo bash install.sh
+ipfs --version
+
+### INITIALIZE IPFS
+ ipfs init
+
+### RUN IPFS NODE LOCALLY
+ipfs daemon
