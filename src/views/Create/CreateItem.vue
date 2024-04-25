@@ -32,6 +32,14 @@
             </div>
 
             <div class="mt-4"> 
+                <div><span class="mr-2">*</span>Choose an action</div>
+                <select name="action" class="rounded-lg p-2 border">
+                    <option value="market">Deploy to a normal market</option>
+                    <option value="auction">Deploy to aution item</option>
+                </select>
+            </div>
+
+            <div class="mt-4"> 
                 <div><span class="mr-2">*</span>Price</div>
                 <div> 
                     <input v-model="price" type="number" class="rounded-lg p-2 border"/>

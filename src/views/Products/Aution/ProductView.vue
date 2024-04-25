@@ -43,7 +43,7 @@
                     </div>
 
                      <div v-if="!itemMarketDetails[6]" class="flex flex-col w-1/2 p-2 border mx-2 mt-3 rounded-lg"> 
-                         <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Eth </div>
+                         <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Atsh </div>
                          <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[7]?.hex }}</span></div>
                          
                          <div class="space-x-2 mt-4"> 
@@ -114,7 +114,7 @@ import NavBar from '@/components/NavBar.vue';
 import { onMounted, ref, computed } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
 import { useRoute } from 'vue-router';
-import {getSignerContract} from '../../scripts/ContractUtils';
+import {getSignerContract} from '../../../scripts/ContractUtils';
 import {nftMyCollection_ABI } from '@/scripts/ContractConstants'
 import {ethers} from 'ethers';
 
