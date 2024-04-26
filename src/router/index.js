@@ -6,6 +6,7 @@ import CollectionLanding from '../views/Products/Collection/CollectionLanding.vu
 import CreateLanding from '@/views/Create/CreateLanding.vue'
 import ViewCart from '@/views/Cart/ViewCart.vue'
 import Taxations from '@/views/Taxes/Taxations.vue'
+import MarketView from '@/views/Products/Market/MarketView.vue'
 
 
 const router = createRouter({
@@ -22,8 +23,13 @@ const router = createRouter({
       component: ProductHome
     },
     {
-      path: '/item/:collection/:tokenId',
-      name: 'productDetails',
+      path: '/market/:collection/:tokenId',
+      name: 'marketDetails',
+      component: MarketView
+    },
+    {
+      path: '/auction/:collection/:tokenId',
+      name: 'auctionDetails',
       component: ProductView
     },
     {

@@ -25,7 +25,7 @@
     </div>
 
     <div v-if="activeComponent==='market'" class="mt-4"> 
-        <CollectionList />
+        <Market />
     </div>
 
     
@@ -41,10 +41,11 @@ import {getSignerContract} from '../../scripts/ContractUtils';
 import {ethers} from 'ethers';
 import {nftMyCollection_ABI } from '@/scripts/ContractConstants'
 import Auction from '@/views/Products/Aution/AuctionHome.vue'
+import Market from '@/views/Products/Market/MarketHome.vue'
 
 let {signer, marketPlace_contract, nftFactory_contract} = getSignerContract();
 
-const activeComponent = ref('auction');
+const activeComponent = ref('market');
 const components = ref([
     {
         name: "Market",
@@ -58,10 +59,6 @@ const components = ref([
 
 
 const router = useRouter();
-const viewProduct = (itemcontract, itemIdentity) => {
-  console.log(itemcontract)
-  router.push(`/item/${itemcontract}/${itemIdentity}`)
-}
 
 
 const tableData = ref([])

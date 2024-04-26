@@ -30,11 +30,9 @@
             </tbody>
             <tbody v-if="listItem?.length">
               <tr class="intro-x" v-for="(data, index) of listItem" :key="index">
-                <!-- {{ data[7] }} -->
                 <td>{{ index + 1 }}</td>
                 <td>{{ data[7].name }}</td>
                 <td>{{ data[7].description }}</td>
-                <td>{{ data[5] }}</td>
                 <td>{{ data[5] }}</td>
                 <td @click="viewProduct(data[1],data[0])" class="cursor-pointer">view</td>
               </tr>
@@ -82,13 +80,12 @@ const columns = ref({
   "name": 'Item Name',
   "description": 'Description',
   "price": 'Price',
-  "currentBiddingPrice": 'Current Offer'
 })
 
 const router = useRouter();
 const viewProduct = (itemcontract, itemIdentity) => {
   console.log(itemcontract)
-  router.push(`/auction/${itemcontract}/${itemIdentity}`)
+  router.push(`/market/${itemcontract}/${itemIdentity}`)
 }
 const viewCollection = (item) => {
   console.log(item.NftContract)
