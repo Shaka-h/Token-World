@@ -33,9 +33,8 @@
 
             <div class="mt-4"> 
                 <div><span class="mr-2">*</span>Choose an action</div>
-                <select name="action" class="rounded-lg p-2 border">
-                    <option value="market">Deploy to a normal market</option>
-                    <option value="auction">Deploy to aution item</option>
+                <select v-model="selectedOption" @change="console.log('Selected option:', selectedOption);                ">
+                    <option v-for="(option, index) of options" :key="index" :value="option.value">{{ option.label }}</option>
                 </select>
             </div>
 
@@ -68,6 +67,11 @@ const emits = defineEmits(['cancel'])
 
 let {signer, marketPlace_contract} = getSignerContract();
 
+const selectedOption = ref(null)
+const options = ref([ 
+    { value: 'market', label: 'Deploy to a normal market' },
+    { value: 'auction', label: 'Deploy to aution item' },
+])
 const name = ref('');
 const fileString = ref(null);
 const supply = ref(null);
@@ -140,25 +144,53 @@ const MintItem = async () => {
         console.log(tokenId);
 
         if (tokenId) {
-            const mintItem = await marketPlace_contract.createMarketItem(
-                router?.params?.nftAddress,
-                tokenId,
-                price.value
-            )
+            if(selectedOption.value === "market"){
+                const mintItem = await marketPlace_contract.createMarketItem(
+                    router?.params?.nftAddress,
+                    tokenId,
+                    price.value
+                )
 
-            console.log(mintItem);
-            let mintedItemReturned = await mintItem.wait()
-            console.log(mintedItemReturned?.events[1].args.itemId);
+                console.log(mintItem);
+                let mintedItemReturned = await mintItem.wait()
+                console.log(mintedItemReturned?.events[1].args.itemId);
 
-            const itemIdBigNumber = mintedItemReturned?.events[1].args.itemId
-            const itemId = itemIdBigNumber.toNumber()
+                const itemIdBigNumber = mintedItemReturned?.events[1].args.itemId
+                const itemId = itemIdBigNumber.toNumber()
 
-            if (itemId) {
-                window.location.reload();
-            } else {
-                console.error('Error creating Item on market');
+                if (itemId) {
+                    window.location.reload();
+                } else {
+                    console.error('Error creating Item on market');
+                }
+
             }
+            else if(selectedOption.value === "auction"){
+                const mintItem = await marketPlace_contract.createAuctionItem(
+                    router?.params?.nftAddress,
+                    tokenId,
+                    price.value
+                )
 
+                console.log(mintItem);
+                let mintedItemReturned = await mintItem.wait()
+                console.log(mintedItemReturned?.events[1].args.itemId);
+
+                const itemIdBigNumber = mintedItemReturned?.events[1].args.itemId
+                const itemId = itemIdBigNumber.toNumber()
+
+                if (itemId) {
+                    window.location.reload();
+                } else {
+                    console.error('Error creating Item on market');
+                }
+
+            }
+            
+            else {
+                console.error('choose an action of deployment')
+            }
+            
         } else {
             console.error('Error creating token for item');
         }

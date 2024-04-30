@@ -123,7 +123,7 @@ const tableData = ref([])
 const collections = ref ([])
 const listItem = ref([])
 onMounted(async () => {
-  tableData.value = await marketPlace_contract.fetchMarketItemsUnsold();
+  tableData.value = await marketPlace_contract.fetchAuctionItemsUnsold();
   console.log(tableData.value, "token");
 
   collections.value = await nftFactory_contract.getAllDeployedNFTCollections();
