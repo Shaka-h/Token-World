@@ -5,27 +5,8 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const marketPlace = "0xC36ff0dd24AD0B87f01517868d4fD32457B9f922"
-
+export const marketPlace = "0x1db3f82a1c9AB1b28F0F9FF69DbB4d0375487FE7"
 export const marketPlace_ABI = [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "auctionID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			}
-		],
-		"name": "acceptOffer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -51,24 +32,6 @@ export const marketPlace_ABI = [
 		],
 		"name": "AccessControlUnauthorizedAccount",
 		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "itemID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "buyPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "buyItem",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -148,70 +111,6 @@ export const marketPlace_ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "createAuctionItem",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "createMarketItem",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -284,13 +183,6 @@ export const marketPlace_ABI = [
 		],
 		"name": "OwnershipTransferred",
 		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -373,7 +265,7 @@ export const marketPlace_ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "auctionID",
+				"name": "Id",
 				"type": "uint256"
 			},
 			{
@@ -405,6 +297,81 @@ export const marketPlace_ABI = [
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tax",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			}
+		],
+		"name": "taxation",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "GOVERN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -412,79 +379,12 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
-				"name": "offerPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "makeOffer",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
 				"internalType": "address",
-				"name": "callerConfirmation",
+				"name": "nftContract",
 				"type": "address"
 			}
 		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "itemID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "sellingPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "sellItem",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
+		"name": "acceptOffer",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -506,6 +406,19 @@ export const marketPlace_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemID",
+				"type": "uint256"
+			}
+		],
+		"name": "buyItem",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -553,16 +466,49 @@ export const marketPlace_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
+				"internalType": "address",
+				"name": "nftContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "createAuctionItem",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "nftContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "createMarketItem",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -599,6 +545,16 @@ export const marketPlace_ABI = [
 					{
 						"internalType": "uint256",
 						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tax",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total",
 						"type": "uint256"
 					},
 					{
@@ -657,6 +613,16 @@ export const marketPlace_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "tax",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					},
+					{
 						"internalType": "bool",
 						"name": "sold",
 						"type": "bool"
@@ -712,6 +678,16 @@ export const marketPlace_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "tax",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					},
+					{
 						"internalType": "bool",
 						"name": "sold",
 						"type": "bool"
@@ -762,6 +738,16 @@ export const marketPlace_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "tax",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					},
+					{
 						"internalType": "bool",
 						"name": "sold",
 						"type": "bool"
@@ -809,6 +795,16 @@ export const marketPlace_ABI = [
 					{
 						"internalType": "uint256",
 						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tax",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total",
 						"type": "uint256"
 					},
 					{
@@ -909,16 +905,21 @@ export const marketPlace_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "GOVERN_ROLE",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "bytes32",
-				"name": "",
+				"name": "role",
 				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
 			}
 		],
-		"stateMutability": "view",
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -986,6 +987,16 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "tax",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			},
+			{
 				"internalType": "bool",
 				"name": "sold",
 				"type": "bool"
@@ -1040,12 +1051,40 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "tax",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			},
+			{
 				"internalType": "bool",
 				"name": "sold",
 				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "auctionID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "offerPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "makeOffer",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -1081,6 +1120,60 @@ export const marketPlace_ABI = [
 			{
 				"internalType": "uint256",
 				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "mytaxes",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tax",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "total",
 				"type": "uint256"
 			}
 		],
@@ -1150,6 +1243,67 @@ export const marketPlace_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "callerConfirmation",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "sellingPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "sellItem",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "bytes4",
@@ -1167,10 +1321,23 @@ export const marketPlace_ABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	}
 ]
 
-export const nftFactory_Address = "0x146C45958F6eae7dcA5F3265f79991FeC138efaf"
+export const nftFactory_Address = "0xF272B0343b705cD5246dd53E48bB7d920942F86E"
 export const nftFactory_ABI = [
 	{
 		"inputs": [

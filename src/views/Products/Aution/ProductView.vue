@@ -38,13 +38,13 @@
                             <div>{{ itemMarketDetails[4] }}</div>
                         </div>
                      </div>
-                     <div v-if="itemMarketDetails[6]"  class="flex flex-col w-1/2 p-2 border items-center justify-center mx-2 bg-green  mt-3 rounded-lg">
+                     <div v-if="!itemMarketDetails[6]"  class="flex flex-col w-1/2 p-2 border items-center justify-center mx-2 bg-green  mt-3 rounded-lg">
                         <div class="font-bold text-xl p-y2 px-4 m-1 mb-2">ITEM SOLD</div>
                     </div>
 
-                     <div v-if="!itemMarketDetails[6]" class="flex flex-col w-1/2 p-2 border mx-2 mt-3 rounded-lg"> 
+                     <div v-if="itemMarketDetails[6]" class="flex flex-col w-1/2 p-2 border mx-2 mt-3 rounded-lg"> 
                          <div class="mt-4 font-bold">Price: {{ itemMarketDetails[5]?.hex }} Atsh </div>
-                         <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[7]?.hex }}</span></div>
+                         <div>Current Bidding: <span class="ml-2">{{ itemMarketDetails[9]?.hex }} Atsh</span></div>
                          
                          <div class="space-x-2 mt-4"> 
                              <label>My Offer</label>
@@ -53,7 +53,6 @@
                          <div> 
                              <input />
                          </div>
-                         <div >Item Sold</div>
                          <div  class="flex space-x-4">
                             <div @click="makeOffer()" class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Make Offer</div>
                          </div> 
@@ -187,7 +186,7 @@ onMounted(async () => {
         itemData.value = responseData
     });
 
-    itemMarket.value = await marketPlace_contract.idMarketItem(router?.params?.tokenId);
+    itemMarket.value = await marketPlace_contract.idAuctionItem(router?.params?.tokenId);
     console.log(itemMarket.value, "market");
 
     // for (const item of itemMarket.value) {

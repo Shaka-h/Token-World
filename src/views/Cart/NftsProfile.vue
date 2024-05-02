@@ -141,6 +141,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
 .mint{
     height: 100%;
     

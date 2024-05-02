@@ -32,8 +32,8 @@
               <tr class="intro-x" v-for="(data, index) of listItem" :key="index">
                 <!-- {{ data[7] }} -->
                 <td>{{ index + 1 }}</td>
-                <td>{{ data[7].name }}</td>
-                <td>{{ data[7].description }}</td>
+                <td>{{ data[10].name }}</td>
+                <td>{{ data[10].description }}</td>
                 <td>{{ data[5] }}</td>
                 <td>{{ data[5] }}</td>
                 <td @click="viewProduct(data[1],data[0])" class="cursor-pointer">view</td>
@@ -122,6 +122,7 @@ const tableData = ref([])
 
 const collections = ref ([])
 const listItem = ref([])
+
 onMounted(async () => {
   tableData.value = await marketPlace_contract.fetchAuctionItemsUnsold();
   console.log(tableData.value, "token");
@@ -131,7 +132,8 @@ onMounted(async () => {
 
   const promises = tableData.value.map(async (item) => {
     const result = [...item];
-    const responseData = await fetchToken(parseInt(item.itemId));
+    // const responseData = await fetchToken(parseInt(item.itemId));
+    const responseData = await fetchToken(1);
     result.push(responseData);
     console.log(result, "trial");
     return result;
@@ -142,7 +144,7 @@ onMounted(async () => {
 
 const fetchToken = async (itemId) => {
   const responseData = {}; // Array to store response data
-  let item = await marketPlace_contract.idMarketItem(itemId);
+  let item = await marketPlace_contract.idAuctionItem(itemId);
 
   const nftMyCollection_contract = new ethers.Contract(item.nftContract, nftMyCollection_ABI, signer);
 

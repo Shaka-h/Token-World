@@ -31,8 +31,8 @@
             <tbody v-if="listItem?.length">
               <tr class="intro-x" v-for="(data, index) of listItem" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ data[7].name }}</td>
-                <td>{{ data[7].description }}</td>
+                <td>{{ data[9].name }}</td>
+                <td>{{ data[9].description }}</td>
                 <td>{{ data[5] }}</td>
                 <td @click="viewProduct(data[1],data[0])" class="cursor-pointer">view</td>
               </tr>
