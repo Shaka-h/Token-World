@@ -179,15 +179,17 @@ const offersMadeToItem = computed(() => {
 });
 
 onMounted(async () => {
-    itemDetails.value = await nftMyCollection_contract.getTokenURIById(router?.params?.tokenId);
+    itemMarket.value = await marketPlace_contract.idAuctionItem(router?.params?.tokenId);
+    console.log(itemMarket.value, "market");
+    
+    itemDetails.value = await nftMyCollection_contract.getTokenURIById(parseInt(itemMarket.value.tokenId));
     console.log(itemDetails.value, "item"); 
     await fetchData().then((responseData) => {
         console.log('All response data:', responseData);
         itemData.value = responseData
     });
 
-    itemMarket.value = await marketPlace_contract.idAuctionItem(router?.params?.tokenId);
-    console.log(itemMarket.value, "market");
+   
 
     // for (const item of itemMarket.value) {
     //   console.log(typeof item, "itemmmmmm", item._isBigNumber); 
