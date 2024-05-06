@@ -198,6 +198,7 @@ const MintItem = async () => {
     } catch (error) {
         console.error('Error creating collection:', error);
     }
+    console.log("home coming")
 }
 
 onMounted(() => {

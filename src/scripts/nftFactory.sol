@@ -27,7 +27,7 @@ contract MyCollection is ERC721URIStorage {
     string[] public allCollectionTokens;
     mapping (uint256 => string) tokenURIById;
 
-    event tokenCreated(string tokenURI, uint256 itemId);
+    event tokenCreated(string tokenURI, uint256 itemId, uint256 time);
 
     constructor(address _marketContractAddress, string memory name, string memory symbol, string memory _logo, string memory _description) ERC721(name, symbol) {
         marketContractAddress = _marketContractAddress;
@@ -46,7 +46,7 @@ contract MyCollection is ERC721URIStorage {
         allCollectionTokens.push(tokenURI); // Add the new token ID to the array
         tokenURIById[newItemId] = tokenURI; // Store the token URI in the mapping
         setApprovalForAll(marketContractAddress, true); //grant transaction permission to marketplace
-        emit tokenCreated(tokenURI, newItemId);
+        emit tokenCreated(tokenURI, newItemId, block.timestamp);
 
         return newItemId; // Return the new token ID
     }
@@ -76,7 +76,7 @@ contract NFTFactory {
     mapping(address => MyNFTCollection) private collectionsByOwner;
     MyNFTCollection[] public allNFTCollections;
 
-    event NFTDeployed(address indexed owner, address indexed nftContract, string name, string symbol, string logo, string description);
+    event NFTDeployed(address indexed owner, address indexed nftContract, string name, string symbol, string logo, string description, uint256 time);
 
     function deployNFTContract(address _marketContractAddress, string memory _name, string memory _symbol, string memory _logo, string memory _description) external returns (address) {
         MyCollection nftContract = new MyCollection(_marketContractAddress, _name, _symbol, _logo, _description);
@@ -84,7 +84,7 @@ contract NFTFactory {
         nftCollectionsByAddress[address(nftContract)] = newCollection;
         collectionsByOwner[msg.sender]  = newCollection;
         allNFTCollections.push(newCollection);
-        emit NFTDeployed(msg.sender, address(nftContract), _name, _symbol, _logo, _description);
+        emit NFTDeployed(msg.sender, address(nftContract), _name, _symbol, _logo, _description, block.timestamp);
         return address(nftContract);
     }
 

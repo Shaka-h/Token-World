@@ -19,8 +19,9 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     bytes32 public constant GOVERN_ROLE = keccak256("GOVERN_ROLE");
     address payable current_owner; //mmiliki wa item at any time t
     address payable seller; //anayetengeneza item kwenye market
-    address payable TRA;
-    
+    address payable TRA = payable(0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF);
+    COIN private coin;
+
     struct MarketItem {
         uint itemId;
         address payable nftContract;
@@ -49,9 +50,12 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     struct Buyer {
         address nftContract;
         uint256 itemID;
-        uint256 buyingPrice;
+        uint256 actualPayment;
+        uint256 tax;
+        uint256 total;
         address buyer;
         address payable seller;
+        uint256 time;
     }
 
     struct Offer {
@@ -130,7 +134,8 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
        uint256 total
     );
 
-    constructor() {
+    constructor(COIN _coin) {
+        coin = _coin;
         current_owner = payable(msg.sender);
     }
 
@@ -327,12 +332,38 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         buyersMadeToItem[itemID].push(Buyer(
             idMarketItem[itemID].nftContract,
             itemID,
+            actualPayment,
+            tax,
             total,
-            msg.sender,
-            idMarketItem[itemID].owner
+            idMarketItem[itemID].seller,
+            idMarketItem[itemID].owner,
+            block.timestamp
         ));     
     }
  
+    function getAllSalesMade(uint256 itemId) external view returns (Buyer[] memory) {
+        Buyer[] storage purchase = buyersMadeToItem[itemId];
+        Buyer[] memory saleInfo = new Buyer[](purchase.length);
+
+        for (uint256 i = 0; i < purchase.length; i++) {
+            saleInfo[i] = Buyer({
+                nftContract: purchase[i].nftContract,
+                itemID: purchase[i].itemID,
+                seller: purchase[i].seller,
+                buyer: purchase[i].buyer,
+                tax: purchase[i].tax,
+                total: purchase[i].total,
+                actualPayment: purchase[i].actualPayment,
+                time: purchase[i].time
+            });
+        }
+        return saleInfo;
+    }
+
+    // function setAtshAddress(COIN _coin) public onlyOwner {
+    //     coin = _coin;
+    // }
+        
     function makeOffer(uint256 auctionID, uint256 offerPrice) public payable nonReentrant {
         require(offerPrice > idAuctionItem[auctionID].currentBiddingPrice, "Offer price must be greater than the current bidding price");
         // require(msg.value == offerPrice, "Please submit the offer price in order to complete making an offer");
@@ -353,7 +384,9 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             previousOffers[previousOffers.length - 1].offerAccepted = false;
 
             // Transfer payment from contract to previousOfferer
-            previousOffers[previousOffers.length - 1].offerer.transfer(previousOffers[previousOffers.length - 1].offerPrice);
+            coin.transferWei(previousOffers[previousOffers.length - 1].offerer, previousOffers[previousOffers.length - 1].offerPrice);
+
+            // previousOffers[previousOffers.length - 1].offerer.transfer(previousOffers[previousOffers.length - 1].offerPrice);
         }
 
         // Update the current highest offer price
@@ -370,6 +403,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             offerAccepted: true,
             offerID: _offerID.current()
         }));
+        
     }
 
     function getAllOffersMade(uint256 auctionID) external view returns (Offer[] memory) {
@@ -418,8 +452,12 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         uint256 actualpayment = offerPrice - tax;
 
         // Transfer payment from contract to seller
-        idAuctionItem[auctionID].seller.transfer(actualpayment);
-        TRA.transfer(tax);
+        // idAuctionItem[auctionID].seller.transfer(actualpayment);
+        // TRA.transfer(tax);
+
+        // coin.transferWei(idAuctionItem[auctionID].seller, actualpayment);
+        // coin.transferWei(TRA, tax);
+
 
         // Transfer NFT ownership from contract to buyer
         IERC721(nftContract).transferFrom(address(this), offerer, tokenId);
@@ -535,7 +573,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             //get only unsold item
             //check if the item has not been sold
             //by checking if the owner field is empty
-            if(idMarketItem[i+1].owner == address(0)){
+            if(idMarketItem[i+1].sold == false ){
                 //yes, this item has never been sold
                 uint currentId = idMarketItem[i + 1].itemId;
                 MarketItem storage currentItem = idMarketItem[currentId];
@@ -550,7 +588,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     function fetchAuctionItemsUnsold() public view returns (AuctionItem[] memory){
         uint auctionCount = _auctionID.current(); //total number of items ever created
         //total number of items that are unsold = total items ever created - total items ever sold
-        uint openAuctionCount = _auctionID.current() - _auctionsClosed.current();
+        uint openAuctionCount = auctionCount - _auctionsClosed.current();
        uint currentIndex = 0;
 
         AuctionItem[] memory auction =  new AuctionItem[](openAuctionCount);
@@ -561,7 +599,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             //get only unsold item
             //check if the item has not been sold
             //by checking if the owner field is empty
-            if(idAuctionItem[i+1].owner == address(0)){
+            if(idAuctionItem[i+1].sold == false ){
                 //yes, this item has never been sold
                 uint currentId = idAuctionItem[i + 1].auctionID;
                 AuctionItem storage currentAuction = idAuctionItem[currentId];
@@ -601,5 +639,6 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         return items;
 
     }
+
 
 }

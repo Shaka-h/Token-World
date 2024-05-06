@@ -114,11 +114,11 @@ import { onMounted, ref, computed } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
 import { useRoute } from 'vue-router';
 import {getSignerContract} from '../../../scripts/ContractUtils';
-import {nftMyCollection_ABI } from '@/scripts/ContractConstants'
+import {nftMyCollection_ABI, marketPlace } from '@/scripts/ContractConstants'
 import {ethers} from 'ethers';
 
 
-let {signer, marketPlace_contract} = getSignerContract();
+let {signer, marketPlace_contract, atsh_contract} = getSignerContract();
 
 
 const router = useRoute()
@@ -205,6 +205,10 @@ onMounted(async () => {
 });
 
 const makeOffer = async () => {
+    // Now you can make atsh payment from atsh contract
+    const pay = await atsh_contract.transferWei(marketPlace, offer.value);
+    await pay.wait();
+    
     let receipt = await marketPlace_contract.makeOffer(router?.params?.tokenId, offer.value, { value: offer.value });
     offerMade.value = await receipt.wait()
     console.log(offerMade.value, "offer made"); 
