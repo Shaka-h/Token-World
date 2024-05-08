@@ -106,9 +106,11 @@ export default {
               </span>
               
               <span class="flex gap-5 text-white justify-center font-poppin text-3xl">
-                <hr class="w-10 bg-sky-500"> We create stunning digital experiences <br>
-                that will help your business stand out .
+                <hr class="w-10 bg-sky-500"> Discover Unique Digital Assets, your gateway to the future of digital ownership. <br>
+                Buy, sell, and trade unique NFTs securely and transparently. <br>
+                Start your journey today with Token World.<br>
               </span>
+
             </div>
             <div class="flex flex-col items-end justify-center">
               <div class="grid grid-cols-4 gap-20">
@@ -406,7 +408,7 @@ export default {
       </button>
 
     <!-- footer -->
-    <footer id="contact" class="bottom-0 font-poppin bg-sky-950 text-white ">
+    <footer id="contact" class="bottom-0 font-poppin bg-sky-950 text-white " style="background-color: #0D1042">
       <div class="p-20">
         <span class="text-3xl flex">
           <hr class="w-10 bg-black mr-3">
