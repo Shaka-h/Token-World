@@ -20,6 +20,7 @@
     "ethers": "^5.7.2",
     "flowbite": "^2.3.0",
     "ipfs-http-client": "^60.0.1",
+    "lottie-web": "^5.12.2",
     "pinia": "^2.1.7",
     "secure-ls": "^1.2.6",
     "sweetalert2": "^11.6.13",

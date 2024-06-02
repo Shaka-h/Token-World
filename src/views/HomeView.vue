@@ -8,6 +8,7 @@ import '@fortawesome/vue-fontawesome';
 
 // const router = useRouter();
 import router from '@/router';
+import LottieVue from './lottie.vue'
 export default {
   data() {
     return {
@@ -85,7 +86,8 @@ export default {
     },
   },
   components: {
-    NavBar
+    NavBar,
+    LottieVue
   },
 }
 
@@ -151,7 +153,8 @@ export default {
       </main>
       <!-- about us -->
       <div class="bg-white h-screen font-poppin text-xl" id="about">
-        <div class="p-10">
+        <div class="p-10 grid grid-cols-2">
+          <div class="p-0">
           <span class="text-sky-700 flex ">
             <hr class="w-10 bg-black mr-3">
             About Us
@@ -193,6 +196,8 @@ export default {
           </div>
           <br>
           <span>And you will be done, and good to go.</span>
+          </div>
+          <LottieVue class="w-5/6 h-5/6"/>
         </div>
       </div>
       
@@ -487,6 +492,12 @@ export default {
   background-image: url('../assets/block7.jpg');
   background-repeat: no-repeat
 }
+
+.coin-image {
+  background-image: url("../assets/images/img.jpg");
+  background-repeat: no-repeat;
+  background-size: cover
+}
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
@@ -560,4 +571,5 @@ export default {
   filter: blur(10px);
   transform: scale(0.9, 0.9);
 }
+
 </style>
