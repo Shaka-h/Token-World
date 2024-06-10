@@ -9,6 +9,7 @@ import '@fortawesome/vue-fontawesome';
 // const router = useRouter();
 import router from '@/router';
 import LottieVue from './lottie.vue'
+import LottieVue3 from './lottie3.vue'
 export default {
   data() {
     return {
@@ -87,7 +88,8 @@ export default {
   },
   components: {
     NavBar,
-    LottieVue
+    LottieVue,
+    LottieVue3
   },
 }
 
@@ -197,7 +199,7 @@ export default {
           <br>
           <span>And you will be done, and good to go.</span>
           </div>
-          <LottieVue class="w-5/6 h-5/6"/>
+          <LottieVue class="h-11/12 w-11/12"/>
         </div>
       </div>
       
@@ -317,65 +319,70 @@ export default {
 
       <!-- benefits -->
       <div class="bg-white h-screen font-poppin text-xl" id="benefits">
-        <div class="p-10">
-          <span class="text-sky-700 flex ">
-            <hr class="w-10 bg-black mr-3">
-            Benefits of using Token World
-            <hr class="w-10 bg-black ml-3">
-          </span>
-          <br>
-          <p>
-            There are lot of benefits when you begin to use Token World
-          </p>
-          <div class="p-3">
-            <li class="pb-4">
-              <span class="text-black">            
-                Commodity Exchange with the Atsh Stable coin
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">  
-                With Atsh Stable coin you will benefit different serviecs 
-                offered by different collections all over the world, such as special membership         
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">  
-                Token world, assist in the Asset Investment plan by investing in 
-                real estates, stocks, bonds, etc using Atsh coin         
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">
-                Enhances transparent and immutable record of ownership and transaction history. 
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">
-                Provides robust security features, such as cryptographic encryption 
-                and distributed consensus mechanisms, which protect your assets from fraud, 
-                tampering, and unauthorized access
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">
-                Enables assets to be tokenized and traded across borders, eliminating geographical 
-                barriers and expanding investment opportunities on a global scale
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">
-                Reduces costs associated with asset issuance, management, and transfer by automating 
-                processes, eliminating intermediaries, and reducing administrative overhead
-              </span>
-            </li>
-            <li class="pb-4">
-              <span class="text-black">
-                It fosters innovation by unlocking new use cases and business models that were not possible 
-                with traditional assets. This includes decentralized finance (DeFi), non-fungible tokens (NFTs), 
-                and tokenized securities, among others
-              </span>
-            </li>
+        <div class="flex grid-cols-2">
+          <div class="p-10 w-3/4">
+            <span class="text-sky-700 flex ">
+              <hr class="w-10 bg-black mr-3">
+              Benefits of using Token World
+              <hr class="w-10 bg-black ml-3">
+            </span>
+            <br>
+            <p>
+              There are lot of benefits when you begin to use Token World
+            </p>
+            <div class="p-3">
+              <li class="pb-4">
+                <span class="text-black">            
+                  Commodity Exchange with the Atsh Stable coin
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">  
+                  With Atsh Stable coin you will benefit different serviecs 
+                  offered by different collections all over the world, such as special membership         
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">  
+                  Token world, assist in the Asset Investment plan by investing in 
+                  real estates, stocks, bonds, etc using Atsh coin         
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">
+                  Enhances transparent and immutable record of ownership and transaction history. 
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">
+                  Provides robust security features, such as cryptographic encryption 
+                  and distributed consensus mechanisms, which protect your assets from fraud, 
+                  tampering, and unauthorized access
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">
+                  Enables assets to be tokenized and traded across borders, eliminating geographical 
+                  barriers and expanding investment opportunities on a global scale
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">
+                  Reduces costs associated with asset issuance, management, and transfer by automating 
+                  processes, eliminating intermediaries, and reducing administrative overhead
+                </span>
+              </li>
+              <li class="pb-4">
+                <span class="text-black">
+                  It fosters innovation by unlocking new use cases and business models that were not possible 
+                  with traditional assets. This includes decentralized finance (DeFi), non-fungible tokens (NFTs), 
+                  and tokenized securities, among others
+                </span>
+              </li>
+            </div>
+          </div>
+          <div class="w-1/4">
+            <LottieVue3 class="h-3/4 w-full"/>
           </div>
         </div>
         <!-- <div class="items-center w-full h-full flex flex-col">
