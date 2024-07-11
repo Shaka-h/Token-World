@@ -1,9 +1,9 @@
 <script >
 import NavBar from '@/components/NavBar.vue'
 import { useRouter } from 'vue-router';
-import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/free-regular-svg-icons'
-import '@fortawesome/free-solid-svg-icons'
+import '@fortawesome/fontawesome-free/css/all.css';
+import '@fortawesome/free-regular-svg-icons';
+import '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/vue-fontawesome';
 
 // const router = useRouter();

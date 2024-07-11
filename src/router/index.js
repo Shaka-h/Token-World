@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ProductHome from '../views/Products/ProductHome.vue'
 import ProductView from '../views/Products/Aution/ProductView.vue'
 import CollectionLanding from '../views/Products/Collection/CollectionLanding.vue'
+import CollectionHome from '../views/Products/Collection/CollectionHome.vue'
 import CreateLanding from '@/views/Create/CreateLanding.vue'
 import ViewCart from '@/views/Cart/ViewCart.vue'
 import Taxations from '@/views/Taxes/Taxations.vue'
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/Products',
       name: 'product',
       component: ProductHome
+    },
+    {
+      path: '/Collections',
+      name: 'collections',
+      component: CollectionHome
     },
     {
       path: '/market/:collection/:tokenId',

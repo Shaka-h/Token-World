@@ -6,6 +6,17 @@
         </div>
         
         <div class="flex space-x-2">
+            <div @click="router.push('/Collections')" class="btn cursor-pointer bg-primary4">
+                <span class="icon">
+                    <svg viewBox="0 0 175 80" width="30" height="30">
+                        <rect width="80" height="15" fill="#161616" rx="10"></rect>
+                        <rect y="30" width="80" height="15" fill="#161616" rx="10"></rect>
+                        <rect y="60" width="80" height="15" fill="#161616" rx="10"></rect>
+                    </svg>
+                </span>
+                <span class="text">Collections</span>
+            </div>
+
             <div @click="router.push('/create')" class="btn cursor-pointer bg-primary4">
                 <span class="icon">
                     <svg viewBox="0 0 175 80" width="30" height="30">
@@ -100,7 +111,7 @@ onMounted(() => {
 
 <style scoped>
 .btn {
-    width: 140px;
+    width: 150px;
     height: 40px;
     border-radius: 5px;
     border: none;

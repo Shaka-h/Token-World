@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="mt-3 w-full">
-      <div class="bg-white">ITEMS<span class="text-blue cursor-pointer ml-4">view all</span></div>
+      <div class="bg-white">ITEMS </div>
       <simple-table :columns="columns" :table-data="tokensData" :has-search="false">
         <template v-slot:actions="{itemData}">
           <div class="">
