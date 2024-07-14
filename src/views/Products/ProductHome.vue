@@ -1,6 +1,4 @@
 <template>
-    <NavBar />
-    <Nav2 />
     <div class="flex w-full p-2 justify-end mt-2">
         <div class="flex">
             <search-bar />
@@ -32,8 +30,6 @@
 </template>
 
 <script setup>
-import NavBar from '@/components/NavBar.vue'
-import Nav2 from '@/components/Nav2.vue'
 import SearchBar from '@/components/SearchBar.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';

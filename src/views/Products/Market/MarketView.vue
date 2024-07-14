@@ -1,5 +1,4 @@
 <template>
-    <NavBar />
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
             <!-- <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">My Offers</div> -->
@@ -10,43 +9,43 @@
         <div>
             <div class="flex " style="height: 60vh"> 
                 <div class="flex items-center justify-center border m-2 rounded-lg" style="width: 50%"> 
-                    <img :src="`http://127.0.0.1:8080/ipfs/${itemData[0]?.symbolCID}`" alt="icon description" class="p-2 h-64">
+                    <img :src="`http://127.0.0.1:8080/ipfs/${itemData?.imageCID}`" alt="icon description" class="p-2 h-64">
                 </div>
 
                 <div class="flex flex-col" style="width: 50%"> 
-                    <div class="ml-2 mt-2 font-bold text-2xl">{{itemData[0]?.name}}</div>
+                    <div class="ml-2 mt-2 font-bold text-2xl">{{itemData?.name}}</div>
 
                     <div class="flex h-full">
                      <div class="flex flex-col p-2 border mx-2 mt-3 w-full rounded-lg"> 
                          
                          <div class="flex flex-col "> 
                              <div>Creator:</div>
-                             <div>{{ itemMarketDetails[3] }}</div>
+                             <div>{{ itemData?.seller }}</div>
                          </div>
                          <div class="mt-2">Description</div>
                          <div> 
-                            {{ itemData[0]?.description }}
+                            {{ itemData?.description }}
                          </div>
          
-                         <div class="mt-4">Token Id: <span class="ml-2">{{ itemMarketDetails[2]?.hex }}</span></div>
+                         <div class="mt-4">Token Id: <span class="ml-2">{{ itemData?.tokenId }}</span></div>
                          
                          <div>Number of sales:<span class="ml-2">{{ salesMadeToItem?.length }}</span></div>
                          <div class="flex flex-col mt-2"> 
                             <div>Owner:</div>
-                            <div>{{ itemMarketDetails[4] }}</div>
+                            <div>{{ itemData?.owner }}</div>
                         </div>
                         <div class="row"> 
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Price: </span>
-                                <span>{{ itemMarketDetails[7]?.hex }} Atsh </span>
+                                <span>{{ itemData?.price }} Atsh </span>
                             </div>
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Tax: </span>
-                                <span>{{ itemMarketDetails[6]?.hex }} Atsh </span>
+                                <span>{{ itemData?.tax }} Atsh </span>
                             </div>                            
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Total: </span>
-                                <span>{{ itemMarketDetails[5]?.hex }} Atsh </span>
+                                <span>{{ itemData?.total }} Atsh </span>
                             </div>
                         </div>
                          <div class="flex gap-4 mt-8">                         
@@ -65,7 +64,7 @@
                 </div>
             </div>
     
-            <div class="mt-8"> 
+            <!-- <div class="mt-8"> 
                 <div class="flex justify-between"> 
                     <div class="font-bold text-xl">Sales</div>
                 </div>
@@ -90,7 +89,7 @@
                         <tbody v-if="!salesMadeToItem?.length">
                         <tr>
                           <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="text-center p-2">
-                            <span class="font-semibold text-base">{{ "NO ITEMS AVAILABLE" }}</span>
+                            <span class="font-semibold text-base">{{ "NO SALES YET" }}</span>
                           </td>
                         </tr>
                         </tbody>
@@ -106,7 +105,7 @@
                         </tbody>
                       </table>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -114,20 +113,25 @@
 
 <script setup>
 import NavBar from '@/components/NavBar.vue';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, onBeforeMount } from 'vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
 import { useRoute } from 'vue-router';
 import {getSignerContract} from '../../../scripts/ContractUtils';
 import {nftMyCollection_ABI, TRA_walletAddress } from '@/scripts/ContractConstants'
 import {ethers} from 'ethers';
 import axios from "axios";
+import { useNFTstore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
 
 let {signer, marketPlace_contract, atsh_contract} = getSignerContract();
 
+const NFTStore = useNFTstore();
+const { getStoreItem } = storeToRefs(NFTStore)
+
+
 
 const router = useRoute()
-const itemData = ref([])
 const nftMyCollection_contract = new ethers.Contract(router?.params?.collection, nftMyCollection_ABI, signer);
 
 const offer = ref(0);
@@ -272,26 +276,45 @@ const salesMadeToItem = computed(() => {
 });
 
 
-onMounted(async () => {
-    itemDetails.value = await nftMyCollection_contract.getTokenURIById(router?.params?.tokenId);
-    console.log(itemDetails.value, "item"); 
-    await fetchData().then((responseData) => {
-        console.log('All response data:', responseData);
-        itemData.value = responseData
-    });
+// onMounted(async () => {
+//     itemDetails.value = await nftMyCollection_contract.getTokenURIById(router?.params?.tokenId);
+//     console.log(itemDetails.value, "item"); 
+//     await fetchData().then((responseData) => {
+//         console.log('All response data:', responseData);
+//         itemData.value = responseData
+//     });
 
-    itemMarket.value = await marketPlace_contract.idMarketItem(router?.params?.tokenId);
-    console.log(itemMarket.value, "market");
+//     itemMarket.value = await marketPlace_contract.idMarketItem(router?.params?.tokenId);
+//     console.log(itemMarket.value, "market");
 
-    getSalesMade.value = await marketPlace_contract.getAllSalesMade(router?.params?.tokenId);
-    console.log(itemMarket.value, "market");
+//     getSalesMade.value = await marketPlace_contract.getAllSalesMade(router?.params?.tokenId);
+//     console.log(itemMarket.value, "market");
 
-    console.log(itemMarketDetails.value[0].hex);
+//     console.log(itemMarketDetails.value[0].hex);
+// });
+
+
+const itemData = computed(() => {
+  return getStoreItem.value("item")
+});  
+
+onBeforeMount(async () => {
+
+  // await NFTStore.loadACollections(route?.params?.collectionId); 
+await NFTStore.loadItem({
+    collectionId: router?.params?.collection,
+    tokenId: router?.params?.tokenId
 });
 
 
+onMounted(async () => {
+    marketPlace_contract.on("MarketItemCreated", async () => {
+      await NFTStore.loadACollectionItem(router?.params?.collectionId); 
+    })
+  
+})
 
-
+});
 
 </script>
  

@@ -1,5 +1,4 @@
 <template>
-    <NavBar />
     <div class="px-4 pb-4">
         <div class="flex justify-end mt-4 space-x-3">
             <!-- <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">My Offers</div> -->

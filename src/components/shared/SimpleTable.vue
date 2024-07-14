@@ -86,7 +86,7 @@
 <script>
 
 import SvgIcon from "@/components/shared/SvgIcon.vue";
-import { useDigitalClubsStore } from "@/store/index.js"
+import { useNFTstore } from "@/store/index.js"
 import { storeToRefs } from "pinia";
 
 export default {
@@ -153,7 +153,7 @@ export default {
       }
   },
   setup(){
-    const store = useDigitalClubsStore();
+    const store = useNFTstore();
     const { getStoreItem } = storeToRefs(store);
 
     return{

@@ -1,5 +1,4 @@
 <template>
-    <NavBar />
     <div class="p-3 mt-4 flex justify-between">
         <div class="font-bold text-3xl"> 
             Create your NFTs
