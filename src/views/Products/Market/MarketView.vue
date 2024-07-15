@@ -37,7 +37,7 @@
                         <div class="row"> 
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Price: </span>
-                                <span>{{ itemData?.price }} Atsh </span>
+                                <span>{{ itemData?.total  }} Atsh </span>
                             </div>
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Tax: </span>
@@ -45,15 +45,15 @@
                             </div>                            
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Total: </span>
-                                <span>{{ itemData?.total }} Atsh </span>
+                                <span>{{ itemData?.price}} Atsh </span>
                             </div>
                         </div>
                          <div class="flex gap-4 mt-8">                         
                            <div  class="flex space-x-4">
-                               <div @click="payAtsh()" class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Sell</div>
+                               <div v-if="itemData?.sold" @click="payAtsh()" class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Sell</div>
                             </div> 
                             <div  class="flex space-x-4">
-                                <div @click="buyItem()" class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Buy</div>
+                                <div v-if="!itemData?.sold" @click="buyItem()" class="border py-1 px-4 bg-indigo rounded-lg bg-primary2 cursor-pointer">Buy</div>
                              </div> 
                         </div>
 
@@ -64,7 +64,7 @@
                 </div>
             </div>
     
-            <!-- <div class="mt-8"> 
+            <div class="mt-8"> 
                 <div class="flex justify-between"> 
                     <div class="font-bold text-xl">Sales</div>
                 </div>
@@ -96,16 +96,16 @@
                         <tbody v-if="salesMadeToItem?.length">
                           <tr class="intro-x" v-for="(data, index) of salesMadeToItem" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ data[5] }}</td>
-                            <td>{{ data[6] }}</td>
-                            <td>{{ data[2].hex }}</td>
-                            <td>{{ data[7].timestamp }}</td>
+                            <td>{{ data?.seller }}</td>
+                            <td>{{ data?.buyer }}</td>
+                            <td>{{ data?.total }}</td>
+                            <td>{{ data?.time }}</td>
 
                         </tr>
                         </tbody>
                       </table>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
@@ -144,26 +144,9 @@ const getSalesMade = ref([])
 const columns = ref({
     "from": "From",
     "to": "To",
-    "price": "Price",
+    "total": "Price",
     "time": "Time"
 })
-
-const fetchData = async () => {
-    const responseData = []; // Array to store response data
-
-    try {
-        const response = await fetch(`http://127.0.0.1:8080/ipfs/${itemDetails.value}`);
-        const data = await response.json();
-        responseData.push(data); // Push data to responseData array
-        console.log('Data for', router?.params?.tokenId, ':', data);
-        // Handle data as needed
-    } catch (error) {
-        console.error('Error fetching data from', router?.params?.tokenId, ':', error);
-        // Handle error
-    }
-    return responseData; // Return the array of response data
-};
-
 
 const itemMarketDetails = computed(() => {
   return itemMarket.value.map(details => {
@@ -176,46 +159,49 @@ const itemMarketDetails = computed(() => {
 });
 
 const buyItem = async () => {
-    const itemId = itemMarketDetails.value[0].hex
-    const approve = await marketPlace_contract.approveBuyer(itemId);
-    console.log(approve, "approve");
+    const itemId = itemData.value?.price
+    console.log(router?.params?.tokenId, "00000000000000000000000000");
+    const buy = await NFTStore.payAtsh(router?.params?.tokenId); 
 
-    if(approve){
-        const itemId = itemMarketDetails.value[0].hex
-        const amount = itemMarketDetails.value[7]?.hex;
-        const tax = itemMarketDetails.value[6]?.hex;
-        const owner = itemMarketDetails.value[4];
-        const seller = itemMarketDetails.value[3];
-        const receipt = ref(owner);
 
-        if (owner === "0x0000000000000000000000000000000000000000") {
-            receipt.value = seller;
-        }
+    // if(approve){
+    //     const itemId = itemMarketDetails.value[0].hex
+    //     const amount = itemMarketDetails.value[7]?.hex;
+    //     const tax = itemMarketDetails.value[6]?.hex;
+    //     const owner = itemMarketDetails.value[4];
+    //     const seller = itemMarketDetails.value[3];
+    //     const receipt = ref(owner);
 
-        console.log(amount, "oofjij", itemMarketDetails.value[3]);
-        console.log(receipt.value);
+    //     if (owner === "0x0000000000000000000000000000000000000000") {
+    //         receipt.value = seller;
+    //     }
 
-        try {
-            // Now you can make atsh payment from atsh contract
-            const pay = await atsh_contract.transferWei(receipt.value, amount);
-            const payTax = await atsh_contract.transferWei(TRA_walletAddress, tax);
-            await pay.wait();
-            await payTax.wait();
+    //     console.log(amount, "oofjij", itemMarketDetails.value[3]);
+    //     console.log(receipt.value);
+
+    //     try {
+    //         // Now you can make atsh payment from atsh contract
+    //         const pay = await atsh_contract.transferWei(receipt.value, amount);
+    //         const payTax = await atsh_contract.transferWei(TRA_walletAddress, tax);
+    //         await pay.wait();
+    //         await payTax.wait();
             
-            // Now you can call buyItem using itemId from the outer scope
-            const buy = await marketPlace_contract.buyItem(itemId);
-            await buy.wait();
+    //         // Now you can call buyItem using itemId from the outer scope
+    //         const buy = await marketPlace_contract.buyItem(itemId);
+    //         await buy.wait();
 
-        } catch (error) {
-            console.error('Error:', error.message);
-        }
-    }
+    //     } catch (error) {
+    //         console.error('Error:', error.message);
+    //     }
+    // }
     
-    window.location.reload()
+    // window.location.reload()
 }
 
 
 async function payAtsh() {
+    await NFTStore.loadACollectionItem(route?.params?.collectionId); 
+
     const itemId = itemMarketDetails.value[0].hex
     const amount = itemMarketDetails.value[5]?.hex;
     const owner = itemMarketDetails.value[4];
@@ -256,60 +242,34 @@ async function payAtsh() {
 }
 
 
-const salesMadeToItem = computed(() => {
-    return getSalesMade.value.map(eachOffer => {
-        return eachOffer.map(offer => {
-            if (typeof offer === 'object' && offer._isBigNumber) {
-                let timestamp = parseInt(offer);
-                let readableDate = new Date(timestamp * 1000).toLocaleString();
-                return { 
-                    ...offer, 
-                    hex: parseInt(offer._hex),
-                    timestamp: readableDate
-                };
-            } 
-            else {
-                return offer;
-            }
-        });
-    });
-});
-
-
-// onMounted(async () => {
-//     itemDetails.value = await nftMyCollection_contract.getTokenURIById(router?.params?.tokenId);
-//     console.log(itemDetails.value, "item"); 
-//     await fetchData().then((responseData) => {
-//         console.log('All response data:', responseData);
-//         itemData.value = responseData
-//     });
-
-//     itemMarket.value = await marketPlace_contract.idMarketItem(router?.params?.tokenId);
-//     console.log(itemMarket.value, "market");
-
-//     getSalesMade.value = await marketPlace_contract.getAllSalesMade(router?.params?.tokenId);
-//     console.log(itemMarket.value, "market");
-
-//     console.log(itemMarketDetails.value[0].hex);
-// });
-
 
 const itemData = computed(() => {
   return getStoreItem.value("item")
 });  
 
+const salesMadeToItem = computed(() => {
+  return getStoreItem.value("itemSales")
+}); 
+
 onBeforeMount(async () => {
 
   // await NFTStore.loadACollections(route?.params?.collectionId); 
-await NFTStore.loadItem({
-    collectionId: router?.params?.collection,
-    tokenId: router?.params?.tokenId
-});
+    await NFTStore.loadItem({
+        collectionId: router?.params?.collection,
+        tokenId: router?.params?.tokenId
+    });
+
+    await NFTStore.loadItemSales(router?.params?.tokenId);
 
 
 onMounted(async () => {
-    marketPlace_contract.on("MarketItemCreated", async () => {
-      await NFTStore.loadACollectionItem(router?.params?.collectionId); 
+    marketPlace_contract.on("itemSold", async () => {
+        await NFTStore.loadItem({
+            collectionId: router?.params?.collection,
+            tokenId: router?.params?.tokenId
+        });
+
+        await NFTStore.loadItemSales(router?.params?.tokenId);
     })
   
 })

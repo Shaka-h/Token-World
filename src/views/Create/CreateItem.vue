@@ -1,5 +1,5 @@
-<template>p
-  <v-dialog v-model="dialog" :persistent="true" width="950">
+<template>
+  <v-dialog v-model="dialog">
     <div class="bg-slate-100 rounded shadow" style="background-color: #E8E8E8">  
       <div
         class="flex justify-between items-center p-2 text-gray-500"

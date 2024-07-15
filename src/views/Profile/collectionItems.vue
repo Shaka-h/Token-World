@@ -1,6 +1,7 @@
 <template>
   <CreateItem @closeDialog="showMint=false" :open-dialog="showMint"></CreateItem>
-  <!-- <ItemDetail @closeDialog="viewProduct=false" :open-dialog="viewProduct" :item-details="ItemDetail" ></ItemDetail> -->
+
+    <!-- <ItemDetail @closeDialog="viewProduct=false" :open-dialog="viewProduct" :item-details="ItemDetail" ></ItemDetail> -->
 
     <div class="px-4 pb-4">
         <div class="flex justify-between my-2 ">
@@ -20,6 +21,10 @@
           <div @click="router.push(`/market/${myCollection.NftContract}`)" v-for="(item, index) of collectionItems" :key="index" class="col-md-3">
                 <div class="card">
                   <div class="card-content-wrapper">
+                    <div v-if="item.sold" class="">
+                      <div class="flex justify-center bg-green px-4 font-bold">OFF MARKET</div>
+                    </div>
+
                     <img :src="`${ipfsGateway}${item.imageCID}`" class="bg-black mt-4" style="height: 320px"></img>
 
                     <div class="card-title">{{item?.name}}</div>

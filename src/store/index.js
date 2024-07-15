@@ -26,7 +26,8 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 collectionItem: [],
                 allCollections: [],
                 collection: [],
-                item: null
+                item: null,
+                itemSales: [],
             }
         }
     },
@@ -581,6 +582,73 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 store.isLoading = false;
             }
         },
+
+        async payAtsh(itemId) {
+            const store = this;
+
+            try {
+                store.isLoading = true;
+                console.log(itemId, "AAAAAAAAAAAAAAAAAAAAAAAA");
+
+                const buy = await marketPlace_contract.buyItem(itemId);
+
+                const receipt = await buy.wait();
+                console.log(receipt, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+                if (receipt?.events[1]?.event == "itemSold") {
+                    notifySuccess("Item Sold!");
+                } else {
+                    console.error('Error creating collection: Deployed contract address not returned.');
+                }
+
+
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+            
+            } finally {
+                store.isLoading = false;
+            }
+        },
+
+        async loadItemSales(itemID) {
+            const store = this;
+
+            try {
+                store.isLoading = true;
+                console.log(itemID, "AAAAAAAAAAAAAAAAAAAAAAAA");
+
+                const marketItemData = await marketPlace_contract.getAllSalesMade(itemID);
+
+                console.log(marketItemData, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                
+                const promises = marketItemData.map(async (item) => {
+                    console.log(parseInt(item.time));
+                    let readableDate = new Date(parseInt(item.time) * 1000).toLocaleString();
+
+                    return {
+                        ...item,
+                        time: readableDate,
+                    };
+                });
+
+
+                const listItem = await Promise.all(promises);
+
+   
+                // Update store state with fetched profiles
+                store.state['itemSales'] = listItem;
+
+                // Log fetched profiles
+                console.log('Fetched profiles:', store.state.itemSales);
+
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+            
+            } finally {
+                store.isLoading = false;
+            }
+        },
+
 
     }
 });
