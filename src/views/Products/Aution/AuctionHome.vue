@@ -1,7 +1,7 @@
 <template>
     <div v-if="!viewAllCollections" class="mt-3 w-full">
         <div class="flex justify-between"> 
-          <div class="bg-white mx-4 font-bold"><span class="text-2xl">ITEMS</span> <span v-if="!viewAllProducts" @click="viewAllProducts = true" class="text-blue cursor-pointer ml-4">view all</span></div>
+          <div class="bg-white mx-4 font-bold"><span class="text-2xl">ITEMS</span> </div>
           <div @click="gobackItem()" v-if="viewAllProducts" class="px-2 py-1 rounded-lg text-white bg-primary2 mx-4 cursor-pointer">Back</div>
         </div>
           <table class="table table-report">
@@ -42,28 +42,7 @@
           </table>
       </div>
   
-      <div v-if="!viewAllProducts"  class="mt-3" >
-        <div class="flex justify-between"> 
-          <div class="bg-white mx-4 mt-4 font-bold"><span class="text-2xl">COLLECTIONS</span> <span v-if="!viewAllCollections" @click="viewAllCollections = true" class="text-blue cursor-pointer ml-4">view all</span></div>
-          <div @click="gobackCollection()" v-if="viewAllCollections" class="px-2 rounded-lg py-1 bg-primary2 text-white mx-4 cursor-pointer">Back</div>
-        </div>
-        <div class="flex">
-          <div v-for="(item, index) of collections" :key="index" class=" pt-4 col-md-4 cursor-pointer flex" >   
-            <div @click="viewCollection(item)" class="block card w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700" >
-              <div class="flex items-center">
-                <img :src="'http://127.0.0.1:8080/ipfs/' + item.logo" alt="icon description" class="p-2 h-32 w-32 rounded-lg">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight ml-10 text-white dark:text-white">{{item.symbol}}</h5>
-              </div>
-              <h5 class="mb-2 text-2xl font-bold tracking-tight text-white dark:text-white">{{item.name}}</h5>
-              <p class="font-normal text-white dark:text-gray-400">{{item.description}}</p>
-            </div> 
-          </div>
-          <div v-if="!collections?.length" class="flex justify-center w-full mt-8 bg-white p-4"> 
-            <span class="font-semibold text-base">{{ "NO COLLECTIONS AVAILABLE" }}</span>
-          </div>
-        </div>
-      </div>
-
+      
 </template>
 
 <script setup>

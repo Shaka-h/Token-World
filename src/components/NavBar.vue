@@ -47,37 +47,79 @@
     else {
       // Check if MetaMask is installed
       if (typeof window.ethereum !== 'undefined') {
-          const provider = window.ethereum;
-          provider.request({ method: 'eth_requestAccounts' })
-              .then((accounts) => {
-                  walletAddressConnected.value = accounts[0];
-                  console.log('Connected with account:', walletAddressConnected.value);
+        const provider = window.ethereum;
 
-                  // Now you can use userAccount to interact with the blockchain
-              })
-              .catch((error) => {
-                  console.error('Error connecting to wallet:', error);
-              });
+    // Function to switch to the desired network
+        // const switchToNetwork = async () => {
+        //     try {
+        //         await provider.request({
+        //             method: 'wallet_switchEthereumChain',
+        //             params: [{ chainId: '0xAA36A7' }] // 11155111 in hexadecimal
+        //         });
+        //         console.log('Successfully switched to chain 11155111');
+        //     } catch (switchError) {
+        //         if (switchError.code === 4902) {
+        //             // This error code indicates that the chain has not been added to MetaMask
+        //             try {
+        //                 await provider.request({
+        //                     method: 'wallet_addEthereumChain',
+        //                     params: [{
+        //                         chainId: '0xAA36A7',
+        //                         chainName: 'Sepolia test network',
+        //                         rpcUrls: ['https://sepolia.infura.io/v3/'],
+        //                         nativeCurrency: {
+        //                             name: 'SepoliaETH',
+        //                             symbol: 'SepoliaETH',
+        //                             decimals: 18
+        //                         },
+        //                         blockExplorerUrls: ['https://sepolia.etherscan.io']
+        //                     }]
+        //                 });
+        //             } catch (addError) {
+        //                 console.error('Failed to add network:', addError);
+        //             }
+        //         } else {
+        //             console.error('Failed to switch network:', switchError);
+        //         }
+        //     }
+        // };
 
-              // Listen for account changes
-              provider.on('accountsChanged', (accounts) => {
-                  console.log('Account changed to:', accounts[0]);
-              });
+        provider.request({ method: 'eth_requestAccounts' })
+            .then((accounts) => {
+                walletAddressConnected.value = accounts[0];
+                console.log('Connected with account:', walletAddressConnected.value);
+                router.push("/Products"); // Access the value of wallet using .value
 
-              // Listen for network changes
-              provider.on('chainChanged', (chainId) => {
-                  console.log('Network changed to:', chainId);
-              });
-          // Check if MetaMask is connected to the network
-          if (provider.networkVersion !== null || provider.chainId !== null) {
-              // Request access to the user's accounts
-             
-          } else {
-              console.error('MetaMask is not connected to the Ethereum network.');
-          }
-      } else {
-          console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
-      }
+                // Attempt to switch to the desired network
+                // switchToNetwork().then(() => {
+                //     router.push(`/${walletAddressConnected.value}/posts`); // Access the value of wallet using .value
+                // }).catch((error) => {
+                //     console.error('Error switching network:', error);
+                // });
+            })
+            .catch((error) => {
+                console.error('Error connecting to wallet:', error);
+            });
+
+        // Listen for account changes
+        provider.on('accountsChanged', (accounts) => {
+            console.log('Account changed to:', accounts[0]);
+        });
+
+        // Listen for network changes
+        provider.on('chainChanged', (chainId) => {
+            console.log('Network changed to:', chainId);
+        });
+
+        // Check if MetaMask is connected to the network
+        if (provider.networkVersion !== null || provider.chainId !== null) {
+            // MetaMask is connected
+        } else {
+            console.error('MetaMask is not connected to the Ethereum network.');
+        }
+    } else {
+        console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
+    }
 
     }
   };

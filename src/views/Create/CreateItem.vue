@@ -1,71 +1,93 @@
 <template>
-           <div class="w-1/2 p-10" style="background-color: rgb(245, 237, 237);">
-            <div class="flex justify-end mt-4">
-                <div class="p-2 border bg-danger text-white hover:p-3 cursor-pointer rounded-lg" @click="closeDialog()">Cancel</div>
-            </div>
-            <div class="flex flex-col space-y-2"> 
-                <div><span class="mr-2">*</span>Image</div>
-                <div class="border rounded-lg items-center justify-center flex ">
-                    
-                    <div class="border w-full p-3 m-3">Item
-                        <div>Upload the file representation of your item</div>
-        
-                    </div>
-                    <input type="file" @change="setFilePath($event)" class="" />
-                </div>
-            </div>
-            <div class="mt-4">
-                <div> 
-                    <div><span class="mr-2">*</span>Name</div>
-                    <div> 
-                        <input v-model="name" class="rounded-lg p-2 border"/>
-                    </div>
-        
-                </div>
-            </div>
-            
-            <div class="mt-4"> 
-                <div><span class="mr-2">*</span>Description</div>
-                <div> 
-                    <input v-model="description" class="rounded-lg p-2 border"/>
-                </div>
-            </div>
+  <v-dialog v-model="dialog">
+    <div class="bg-slate-100 rounded shadow" style="background-color: #E8E8E8">  
+      <div
+        class="flex justify-between items-center p-2 text-gray-500"
+      >
+        <span class="font-bold px-2">
+          <span v-if="title">{{ title }}</span>
+        </span>
+        <button @click="$emit('closeDialog', true)">
+          <svg-icon
+            name="close"
+            height="h-6"
+            width="w-6"
+            color="#a91926"
+            :override_color="true"
+            :stroke="false"
+          ></svg-icon>
+        </button>
+      </div>
 
-            <div class="mt-4"> 
-                <div><span class="mr-2">*</span>Choose an action</div>
-                <select v-model="selectedOption" @change="console.log('Selected option:', selectedOption);                ">
-                    <option v-for="(option, index) of options" :key="index" :value="option.value">{{ option.label }}</option>
-                </select>
-            </div>
+      <div class="p-5 ">{{ router?.params?.collectionId }}
+          <div class="flex flex-col space-y-2"> 
+              <div><span class="mr-2">*</span>Image</div>
+              <div class="border rounded-lg items-center justify-center flex ">
+                  
+                  <div class="border w-full p-3 m-3">Item
+                      <div>Upload the file representation of your item</div>
+      
+                  </div>
+                  <input type="file" @change="setFilePath($event)" class="" />
+              </div>
+          </div>
+          <div class="mt-4">
+              <div> 
+                  <div><span class="mr-2">*</span>Name</div>
+                  <div> 
+                      <input v-model="name" class="rounded-lg p-2 border"/>
+                  </div>
+      
+              </div>
+          </div>
+          
+          <div class="mt-4"> 
+              <div><span class="mr-2">*</span>Description</div>
+              <div> 
+                  <input v-model="description" class="rounded-lg p-2 border"/>
+              </div>
+          </div>
 
-            <div class="mt-4"> 
-                <div><span class="mr-2">*</span>Price</div>
-                <div> 
-                    <input v-model="price" type="number" class="rounded-lg p-2 border"/>
-                </div>
-            </div>
+          <div class="mt-4"> 
+              <div><span class="mr-2">*</span>Choose an action</div>
+              <select v-model="selectedOption" @change="console.log('Selected option:', selectedOption);                ">
+                  <option v-for="(option, index) of options" :key="index" :value="option.value">{{ option.label }}</option>
+              </select>
+          </div>
+
+          <div class="mt-4"> 
+              <div><span class="mr-2">*</span>Price</div>
+              <div> 
+                  <input v-model="price" type="number" class="rounded-lg p-2 border"/>
+              </div>
+          </div>
+      
+          <div class="flex justify-end mt-4">
+              <div class="p-2 border bg-primary2 text-white hover:p-3 cursor-pointer rounded-lg" @click="MintItem()">Mint</div>
+          </div>
+      
+      </div>
         
-            <div class="flex justify-end mt-4">
-                <div class="p-2 border bg-primary2 text-white hover:p-3 cursor-pointer rounded-lg" @click="MintItem()">Mint</div>
-            </div>
-        </div>
+    </div>
+  </v-dialog>
 </template>
-
+  
+  
 <script setup>
-import { ref, onMounted} from 'vue';
-import {getSignerContract} from '../../scripts/ContractUtils';
-import addMetadata  from '@/scripts/IPFS'
-import addMetadataFile  from '@/scripts/IPFSJSON'
-import {nftMyCollection_ABI, marketPlace } from '@/scripts/ContractConstants'
-import {ethers} from 'ethers';
+import { onMounted, ref, watch, computed } from 'vue';
+import { useNFTstore } from "@/store/index.js";
+import {storeToRefs} from "pinia";  
 import { useRoute } from 'vue-router';
+import SvgIcon from "@/components/shared/SvgIcon.vue";
 
 const router = useRoute()
-const dialog = ref(false)
 const nftMyCollection_contract = ref()
-const emits = defineEmits(['cancel'])
 
-let {signer, marketPlace_contract} = getSignerContract();
+const NFTStore = useNFTstore();
+const props = defineProps(["openDialog", "profileData", "profileContract"]);
+const emits = defineEmits(["closeDialog"]);
+const { getStoreItem } = storeToRefs(NFTStore)
+  
 
 const selectedOption = ref(null)
 const options = ref([ 
@@ -74,137 +96,73 @@ const options = ref([
 ])
 const name = ref('');
 const fileString = ref(null);
-const supply = ref(null);
 const description = ref('');
-const symbolCID = ref('')
 const price = ref()
 
 const closeDialog = () => {
-  emits('cancel')
+  emits('closeDialog')
 }
 
 const setFilePath = ($event) => {
     fileString.value = $event.target.files[0]
 }
-
-const uploadItem = async () => {
-    try {
-        const file = await addMetadata(fileString.value);
-        console.log('logo uploaded to IPFS with CID:', file.toString());
-        symbolCID.value = file.toString(); 
-    } catch (error) {
-        console.error('Error uploading Item to IPFS:', error);
-        throw error; 
-    }
-};
-
-const getItemCID = async () => {
-    try {
-        await uploadItem();
-
-        const itemCID = await addMetadataFile(
-            {
-                "name": name.value,
-                "symbolCID":symbolCID.value,
-                "supply": supply.value,
-                "description": description.value,
-            }
-            
-        );
-        console.log('Item created successfully with metadata. CID:', itemCID);
-
-        return itemCID
-    } catch (error) {
-        console.error('Error creating collection:', error);
-    }
-};
-
+const dialog = ref(false)
 
 const MintItem = async () => {
-    try {
-        let tokenURI = await getItemCID();
-        console.log(tokenURI);
+    if(selectedOption.value === "market"){
+        try {
+        await NFTStore.MarketMintItem({
+            "name": name.value,
+            "option": selectedOption.value,
+            "description": description.value,
+            "price": price.value,
+            "image": fileString.value,
+            "contractAddress": router?.params?.collectionId
+        });
 
-        const tokenURIReturned = await nftMyCollection_contract.value.createToken(
-            tokenURI
-        )
-        console.log(tokenURIReturned);
+        emits('closeDialog')
+        // console.log("deno");
+        // await NFTStore.loadMyProfile(NFTStore.getConnectedAddress());
 
-        let receipt = await tokenURIReturned.wait()
-
-        console.log(receipt);
-        console.log(receipt?.events[3].args.tokenURI);
-        console.log(receipt?.events[3].args.itemId);
-        
-        const tokenIdBigNumber = receipt?.events[3].args.itemId;
-
-        // Convert BigNumber to JavaScript number
-        const tokenId = tokenIdBigNumber.toNumber();
-
-        console.log(tokenId);
-
-        if (tokenId) {
-            if(selectedOption.value === "market"){
-                const mintItem = await marketPlace_contract.createMarketItem(
-                    router?.params?.nftAddress,
-                    tokenId,
-                    price.value
-                )
-
-                console.log(mintItem);
-                let mintedItemReturned = await mintItem.wait()
-                console.log(mintedItemReturned?.events[1].args.itemId);
-
-                const itemIdBigNumber = mintedItemReturned?.events[1].args.itemId
-                const itemId = itemIdBigNumber.toNumber()
-
-                if (itemId) {
-                    window.location.reload();
-                } else {
-                    console.error('Error creating Item on market');
-                }
-
-            }
-            else if(selectedOption.value === "auction"){
-                const mintItem = await marketPlace_contract.createAuctionItem(
-                    router?.params?.nftAddress,
-                    tokenId,
-                    price.value
-                )
-
-                console.log(mintItem);
-                let mintedItemReturned = await mintItem.wait()
-                console.log(mintedItemReturned?.events[1].args.itemId);
-
-                const itemIdBigNumber = mintedItemReturned?.events[1].args.itemId
-                const itemId = itemIdBigNumber.toNumber()
-
-                if (itemId) {
-                    window.location.reload();
-                } else {
-                    console.error('Error creating Item on market');
-                }
-
-            }
-            
-            else {
-                console.error('choose an action of deployment')
-            }
-            
-        } else {
-            console.error('Error creating token for item');
-        }
-
-    } catch (error) {
-        console.error('Error creating collection:', error);
+      } catch (error) {
+        console.error('Error creating profile:', error);
+      }
+    } else if(selectedOption.value === "auction"){
+        try {
+        await NFTStore.AuctionMintItem({
+            "name": name.value,
+            "option": selectedOption.value,
+            "description": description.value,
+            "price": price.value,
+            "image": fileString.value,
+            "contractAddress": router?.params?.collectionId
+        });
+        emits('closeDialog')
+        // console.log("doen", NFTStore.getConnectedAddress());
+        // await NFTStore.loadMyProfile(NFTStore.getConnectedAddress());
+      } catch (error) {
+        console.error('Error creating profile:', error);
+      }
     }
-    console.log("home coming")
+    else {
+        console.error('choose an action of deployment')
+    }
 }
 
-onMounted(() => {
-    nftMyCollection_contract.value = new ethers.Contract(router?.params?.nftAddress, nftMyCollection_ABI, signer);    
-    console.log(router?.params?.nftAddress)
-
+watch(() => props.openDialog, (value) => {
+  dialog.value = value
+  console.log(value,"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 })
 
-</script>
+
+  const myProfile = computed(() => {
+    return getStoreItem.value("myProfile")
+  })
+  
+  
+  
+  onMounted(async () => {
+    //   await NFTStore.loadMyProfile(NFTStore.getConnectedAddress()); 
+  });
+  
+  </script>

@@ -1,10 +1,8 @@
 import {notifyError, notifySuccess} from "@/services/notificationService.js";
-import {apolloClient} from "@/apollo.js";
-import {uploadBase64File} from "@/graphql/uploadFile.graphql.js";
+import addMetadata  from '@/scripts/IPFS'
 
 
 export const patchFormFields = (formFields, defaultValues) => {
-
     return formFields.map(field => {
         let fieldModified = {
             ...field
@@ -50,7 +48,19 @@ export const patchFormFields = (formFields, defaultValues) => {
                     timeValue.mm = time[1]
                 }
                 fieldModified.value = timeValue
-            }
+            } 
+            // else if (field?.inputType === 'form-array') {
+            //     fieldModified.value = []
+            //     for (const defaultValue of defaultValues[field?.children]) {
+            //         let key = Object.keys(defaultValue).find(key => key.toLowerCase().includes('name'))
+
+            //         if (key) {
+            //             fieldModified.value.push(defaultValue[key])
+            //         } else {
+            //             fieldModified.value.push(defaultValue[field?.children])
+            //         }
+            //     }
+            // }
         } else {
             fieldModified.value = null
         }
@@ -58,47 +68,23 @@ export const patchFormFields = (formFields, defaultValues) => {
     })
 }
 
-export const uploadFile = async (file, store) => {
-    return new Promise((resolve, reject) => {
-        if (file instanceof Object) {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                let base64String = reader.result.split(",")[1];
 
-                await apolloClient.mutate({
-                    fetchPolicy: "no-cache",
-                    mutation: uploadBase64File,
-                    variables: {
-                        input: {
-                            fileName: file?.name,
-                            base64String
-                        }
-                    }
-                }).then(async (response) => {
-                    let result = Object.values(response)[0];
-                    result = Object.values(result)[0];
-                    if (result?.response?.status) {
-                        notifySuccess(result.response.message);
-                        return result?.data;
-                    } else {
-                        notifyError(`${result.response.code}: ${result.response.message}`);
-                    }
-                    return result?.response?.status;
-                }).then((data) => {
-                    resolve(data);
-                }).catch((error) => {
-                    notifyError(error);
-                    reject(error);
-                    return;
-                });
-            };
 
-            reader.onerror = async (error) => {
-                notifyError(error);
-                reject(error);
-                throw(error);
-            };
+export const uploadFile = async (file) => {
+    try {
+        const logoString = await addMetadata(file);
+        console.log('Logo uploaded to IPFS with CID:', logoString.toString());
+        let result = logoString.toString();
+        if (result) {
+            notifySuccess("successfully uploaded file");
+            return result;
+        } else {
+            console.log("error");
+            notifyError("error");
         }
-    });
+        return result;
+    } catch (error) {
+        notifyError(error);
+        return;
+    }
 }

@@ -1,6 +1,4 @@
 <template>
-    <NavBar />
-    
     <div class="p-2"> 
       <div class="flex w-full p-2 justify-between mt-2">
         <div class="flex space-x-8 w-full"> 

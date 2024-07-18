@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
       <div class="text-2xl mb-4 border-b-4">Choose Collection to mint item</div>
-        <div @click="router.push(`/cart/${item.NftContract}`)" v-for="(item, index) of tableData" :key="index" class="card rounded-lg border hover:bg-gray hover:p-3 p-2 my-2 cursor-pointer" style="">   
+        <div @click="router.push(`/profile/${item.NftContract}`)" v-for="(item, index) of tableData" :key="index" class="card rounded-lg border hover:bg-gray hover:p-3 p-2 my-2 cursor-pointer" style="">   
           <div @click="viewCollection(item)" class="flex justify-between p-4">
             <div> 
               <div class="flex items-center"> 
