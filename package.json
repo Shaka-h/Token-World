@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
@@ -20,9 +21,9 @@
     "ethers": "^5.7.2",
     "flowbite": "^2.3.0",
     "ipfs-http-client": "^60.0.1",
+    "kubo-rpc-client": "^4.1.1",
     "lottie-web": "^5.12.2",
     "pinia": "^2.1.7",
-    "kubo-rpc-client": "^4.1.1",
     "qs": "^6.11.2",
     "quill": "^2.0.1",
     "quill-autoformat": "^0.1.2",

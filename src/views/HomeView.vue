@@ -121,7 +121,7 @@ export default {
                 <div>
                   
                 </div>
-                <div class="absolute right-1/4 left-3/4 top-1/3 w-1/4 text-gray-400">
+                <div class="absolute right-1/4 left-3/4 top-1/5 w-1/4 text-gray-400">
                   <a href="javascript:void(0)" @click="scrollToAbout">
                     <div class="mt-4 text-sm glass lg:w-3/4 lg:p-2 md:w-3/4 md:p-2 sm:w-3/4 sm:p-1">
                       <li class="uppercase">About Us</li>
