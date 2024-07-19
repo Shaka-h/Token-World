@@ -3,7 +3,7 @@
       <div class="flex w-full p-2 justify-between mt-2">
         <div class="flex space-x-8 w-full"> 
             <div class="font-bold text-2xl">TOTAL TAX COLLECTED:</div>
-            <div class="font-bold text-2xl">1,000,000,000,000<span class="ml-2">Atsh</span></div>
+            <div class="font-bold text-2xl">1,835,000<span class="ml-2">Atsh</span></div>
         </div>
         
         <div class="flex space-x-2">

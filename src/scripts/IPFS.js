@@ -6,7 +6,7 @@ const ipfs = create('/ip4/127.0.0.1/tcp/5001');
 
 
 // Function to add metadata to IPFS
-async function addMetadataFile(metadata) {
+async function addMetadata(metadata) {
     try {
         // Add metadata to IPFS 
         const { cid } = await ipfs.add(metadata);
@@ -20,4 +20,4 @@ async function addMetadataFile(metadata) {
 }
 
 
-export default addMetadataFile;
+export default addMetadata;

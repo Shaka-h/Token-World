@@ -2854,7 +2854,7 @@ export const TRA_walletAddress ="0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF"
 // Sepolia
 // export const DSCEngine = "0x9902D0D92996e2287eF2Ef86A9796c0DBBFA783c"
 // Anvil
-export const DSCEngine = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+export const DSCEngine = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
 export const DSCEngine_ABI = [
 	{
 		"inputs": [

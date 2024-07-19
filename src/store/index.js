@@ -2,6 +2,7 @@ import { notifyError, notifySuccess, notifyWarning } from "@/services/notificati
 import { getSignerContract } from '@/scripts/ContractUtils.js';
 import { defineStore } from "pinia";
 import addMetadataFile from "@/scripts/IPFSJSON.js";
+import addMetadata from "@/scripts/IPFS.js";
 import fetchData from "@/scripts/fetchData";
 import fetchToken from "@/scripts/fetchToken";
 import { ethers } from 'ethers';
@@ -10,8 +11,9 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import router from '@/router';
 import {uploadFile} from "@/interfaces/global.interface.js";
+import { DSCEngine } from '@/scripts/ContractConstants'
 
-let { nftFactory_contract, marketPlace_contract, DSCEngine_contract, DecentralizedStableCoin_contract, signer } = getSignerContract();
+let { nftFactory_contract, marketPlace_contract, atsh_contract, DSCEngine_contract, DecentralizedStableCoin_contract, signer } = getSignerContract();
 // let router = useRouter()
 
 export const useNFTstore = defineStore('stableCoinStore', {
@@ -43,9 +45,7 @@ export const useNFTstore = defineStore('stableCoinStore', {
         async createCollection (data) {
             const store = this;
             try {
-                const collectionPhotoCID = await addMetadataFile({
-                    "logoCID": data?.logoCID
-                });
+                const collectionPhotoCID = await addMetadata(data?.logoCID);
 
                 const deployedContractAddress = await nftFactory_contract.deployNFTContract(
                     marketPlace,
@@ -104,8 +104,6 @@ export const useNFTstore = defineStore('stableCoinStore', {
                     const logoCID = await fetchToken(collection?.logo);
                     return {
                         ...collection,
-                        logo: logoCID,
-                        logo: logoCID?.logoCID,
                     };
                 });
 
@@ -583,19 +581,47 @@ export const useNFTstore = defineStore('stableCoinStore', {
             }
         },
 
-        async payAtsh(itemId) {
+        async etherToWei(etherValue) {
+            const weiBigNumber = ethers.utils.parseEther(etherValue.toString());
+            return weiBigNumber.toString();
+        },
+
+        async weiToEther(weiValue) {
+            const weiBigNumber = ethers.BigNumber.from(weiValue.toString());
+            let etherValue = ethers.utils.formatEther(weiBigNumber);
+    
+            // If the ether value is a whole number, remove the decimal part
+            if (etherValue.includes('.')) {
+                etherValue = etherValue.replace(/\.0+$/, '');
+            }
+    
+            return etherValue;
+        },
+
+        async payAtsh(data) {
             const store = this;
 
             try {
                 store.isLoading = true;
-                console.log(itemId, "AAAAAAAAAAAAAAAAAAAAAAAA");
+                console.log(data, "AAAAAAAAAAAAAAAAAAAAAAAA");
 
-                const buy = await marketPlace_contract.buyItem(itemId);
+                const buy = await marketPlace_contract.buyItem(data?.id);
 
                 const receipt = await buy.wait();
                 console.log(receipt, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
                 if (receipt?.events[1]?.event == "itemSold") {
+
+                    const amountInWei = await this.etherToWei(data?.price)
+
+                    console.log(amountInWei, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+                    // const mytokenBalance = await DecentralizedStableCoin_contract.approve( DSCEngine, amountInWei)
+
+                    const pay = await atsh_contract.transfer(data?.seller, amountInWei);
+
+                    const payment = pay.wait();
+
                     notifySuccess("Item Sold!");
                 } else {
                     console.error('Error creating collection: Deployed contract address not returned.');

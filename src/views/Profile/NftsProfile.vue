@@ -9,7 +9,7 @@
             </div>
         </div>
     
-        <div class="row"> 
+        <div class="row">
             <div @click="router.push(`/profile/${myCollection.NftContract}`)" v-for="(myCollection, index) of myCollections" :key="index" class="card col-md-4 hover:bg-gray hover:p-3 p-2 my-2 cursor-pointer" style="">   
 
                 <div class="border rounded-lg p-2 ">

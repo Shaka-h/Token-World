@@ -161,7 +161,11 @@ const itemMarketDetails = computed(() => {
 const buyItem = async () => {
     const itemId = itemData.value?.price
     console.log(router?.params?.tokenId, "00000000000000000000000000");
-    const buy = await NFTStore.payAtsh(router?.params?.tokenId); 
+    const buy = await NFTStore.payAtsh({
+        id: router?.params?.tokenId,
+        price: parseInt(itemData.value?.price),
+        seller: itemData.value?.seller
+    }); 
 
 
     // if(approve){
