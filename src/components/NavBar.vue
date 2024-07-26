@@ -26,7 +26,7 @@
   
   <script setup>
   import { useRouter } from 'vue-router';
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import {walletAddressConnected} from "@/scripts/ContractConstants";
 
   
@@ -123,6 +123,6 @@
 
     }
   };
-
-  </script>
+  
+</script>
   

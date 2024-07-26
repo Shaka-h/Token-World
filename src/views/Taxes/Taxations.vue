@@ -3,7 +3,7 @@
       <div class="flex w-full p-2 justify-between mt-2">
         <div class="flex space-x-8 w-full"> 
             <div class="font-bold text-2xl">TOTAL TAX COLLECTED:</div>
-            <div class="font-bold text-2xl">1,835,000<span class="ml-2">Atsh</span></div>
+            <div class="font-bold text-2xl">{{totalTax}}<span class="ml-2">Atsh</span></div>
         </div>
         
         <div class="flex space-x-2">
@@ -35,7 +35,7 @@
           <div class="font-bold">TRANSACTIONS</div>
           <div @click="goBack" v-if="viewAllProducts" class="px-2 rounded-lg bg-primary cursor-pointer">Back</div>
         </div>
-        <simple-table :columns="columns" :table-data="tableData" :has-search="false">
+        <simple-table :columns="columns" :table-data="allTaxes" :has-search="false">
           
         </simple-table>
       </div>
@@ -49,18 +49,23 @@ import NavBar from '@/components/NavBar.vue'
 import Nav2 from '@/components/Nav2.vue'
 import SearchBar from '@/components/SearchBar.vue';
 import SimpleTable from "@/components/shared/SimpleTable.vue";
-import { ref } from 'vue';
+import { ref, onBeforeMount, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useNFTstore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
+import {getSignerContract} from '../../scripts/ContractUtils';
 
+let {signer, marketPlace_contract, atsh_contract} = getSignerContract();
+
+const NFTStore = useNFTstore();
+const { getStoreItem } = storeToRefs(NFTStore)
 const viewAllCollections = ref(false)
 const viewAllProducts = ref(false)
 
 const columns = ref({
-  "itemName": 'item Name',
-  "collection": 'Collection',
   "from": 'From',
   "to": "To",
-  "actualPrice": 'Actual Price',
+  "price": 'Price',
   "tax": 'Tax',
   "date": "Date"
 })
@@ -147,43 +152,32 @@ const tableData = ref([
   },
 ]);
 
-const collections = ref ([
-  {
-    "name": "Classic Console",
-    "description": "Relive the golden age of gaming with this iconic console that pioneered the home entertainment revolution.",
-    "rarity": "Legendary",
-    "tokenId": 1,
-  },
-  {
-    "name": "Smartphone Sensation",
-    "description": "Experience the evolution of communication with this groundbreaking smartphone that changed the way we connect and interact.",
-    "rarity": "Epic",
-    "tokenId": 1,
-  },
-  {
-    "name": "Revolutionary Robot",
-    "description": "Meet the futuristic robot that revolutionized automation and robotics, ushering in a new era of technological innovation.",
-    "rarity": "Mythic",
-    "tokenId": 1,
-  },
-  {
-    "name": "Digital Camera Masterpiece",
-    "description": "Capture life's precious moments with unparalleled clarity and precision using this legendary digital camera that redefined photography.",
-    "rarity": "Legendary",
-    "tokenId": 1,
-  },
-  {
-    "name": "Smartwatch Wonder",
-    "description": "Stay connected and organized on the go with this innovative smartwatch that seamlessly integrates technology into your daily life.",
-    "rarity": "Rare",
-    "tokenId": 1,
-  },
-  {
-    "name": "Virtual Reality Voyager",
-    "description": "Immerse yourself in virtual worlds with this cutting-edge VR headset that transports you to realms limited only by your imagination.",
-    "rarity": "Epic",
-    "tokenId": 1,
-  }
-])
+const allTaxes = computed(() => {
+  return getStoreItem.value("allTaxes")
+}); 
+
+const totalTax = computed(() => {
+  return getStoreItem.value("totalTax")
+}); 
+
+onBeforeMount(async () => {
+
+  // await NFTStore.loadACollections(route?.params?.collectionId); 
+    await NFTStore.loadAllSales();
+    await NFTStore.loadTotalTax();
+
+
+onMounted(async () => {
+    marketPlace_contract.on("itemSold", async () => {
+        await NFTStore.loadItem({
+            collectionId: router?.params?.collection,
+            tokenId: router?.params?.tokenId
+        });
+
+        await NFTStore.loadItemSales(router?.params?.tokenId);
+    })
+  
+})
+});
 
 </script>

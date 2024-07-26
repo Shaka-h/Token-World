@@ -5,6 +5,7 @@ export const walletAddressConnected = ref("");
 // // Local
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs/'
 
+// export const ipfsGateway = 'https://ipfs.all.co.tz/ipfs/'
 
 // export const ipfsClient = create({
 // 	http: "/ip4/206.189.99.218/tcp/5001",
@@ -15,7 +16,7 @@ export const ipfsGateway = 'http://127.0.0.1:8080/ipfs/'
   
 
 // Anvil
-export const marketPlace = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+export const marketPlace = "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f"
 // Sepolia
 // export const marketPlace = "0x448BBCE2AdCdA84407f769dFeaF9F199F2F3Ea90"
 export const marketPlace_ABI = [
@@ -341,6 +342,19 @@ export const marketPlace_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "_totalTax",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -356,6 +370,60 @@ export const marketPlace_ABI = [
 		"name": "acceptOffer",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "allTaxes",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tax",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -938,6 +1006,61 @@ export const marketPlace_ABI = [
 	},
 	{
 		"inputs": [],
+		"name": "getAllTaxes",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "itemId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tax",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct NFTMarket.taxes[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getContractBalance",
 		"outputs": [
 			{
@@ -1239,6 +1362,11 @@ export const marketPlace_ABI = [
 				"internalType": "uint256",
 				"name": "total",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -1369,7 +1497,7 @@ export const marketPlace_ABI = [
 ]
 
 // Anvil
-export const nftFactory_Address = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
+export const nftFactory_Address = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"
 // Sepolia
 // export const nftFactory_Address = "0xF272B0343b705cD5246dd53E48bB7d920942F86E"
 export const nftFactory_ABI = [

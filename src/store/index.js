@@ -30,6 +30,8 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 collection: [],
                 item: null,
                 itemSales: [],
+                allTaxes: [],
+                totalTax: null
             }
         }
     },
@@ -675,6 +677,64 @@ export const useNFTstore = defineStore('stableCoinStore', {
             }
         },
 
+        async loadAllSales() {
+            const store = this;
+
+            try {
+                const marketItemData = await marketPlace_contract.getAllTaxes();
+
+                console.log(marketItemData, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                
+                const promises = marketItemData.map(async (item) => {
+                    console.log(parseInt(item.time));
+                    let readableDate = new Date(parseInt(item.time) * 1000).toLocaleString();
+
+                    return {
+                        ...item,
+                        time: readableDate,
+                    };
+                });
+
+
+                const listItem = await Promise.all(promises);
+
+   
+                // Update store state with fetched profiles
+                store.state['allTaxes'] = listItem;
+
+                // Log fetched profiles
+                console.log('Fetched profiles:', store.state.allTaxes);
+
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+            
+            } finally {
+                store.isLoading = false;
+            }
+        },
+
+        async loadTotalTax() {
+            const store = this;
+
+            try {
+                const marketItemData = await marketPlace_contract._totalTax();
+
+                console.log(marketItemData, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+   
+                // Update store state with fetched profiles
+                store.state['totalTax'] = marketItemData;
+
+                // Log fetched profiles
+                console.log('Fetched profiles:', store.state.totalTax);
+
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+            
+            } finally {
+                store.isLoading = false;
+            }
+        },
 
     }
 });

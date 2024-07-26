@@ -15,10 +15,13 @@ export default {
     return {
       showScrollButton: false,
       scrolledDown: false,
+      noWallet: false // Initialize noWallet here
+
     }
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll)
+    window.addEventListener("scroll", this.handleScroll);
+    this.connectWallet();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll)
@@ -85,6 +88,37 @@ export default {
     goTo(routename) {
       router.push(routename)
     },
+    async connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        const provider = window.ethereum;
+        try {
+          const accounts = await provider.request({ method: 'eth_requestAccounts' });
+          this.walletAddressConnected = accounts[0];
+          console.log('Connected with account:', this.walletAddressConnected);
+          // router.push("/Products");
+        } catch (error) {
+          console.error('Error connecting to wallet:', error);
+        }
+
+        provider.on('accountsChanged', (accounts) => {
+          console.log('Account changed to:', accounts[0]);
+        });
+
+        provider.on('chainChanged', (chainId) => {
+          console.log('Network changed to:', chainId);
+        });
+
+        if (provider.networkVersion !== null || provider.chainId !== null) {
+          // MetaMask is connected
+        } else {
+          console.error('MetaMask is not connected to the Ethereum network.');
+        }
+      } else {
+        console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
+        this.noWallet = true;
+      }
+    }
+
   },
   components: {
     NavBar,
@@ -93,12 +127,16 @@ export default {
   },
 }
 
+
+
 </script>
 
 <template>
   <div>
       <main class="image h-screen">
         <NavBar />
+
+        <div v-if="noWallet" class="cursor-pointer bg-red flex justify-center py-2 capitalize"> <a href="https://alphachain.all.co.tz/Wallet">Wallet not detected, Please install a wallet to connect !</a></div>
 
         <!-- content at the center -->
         <div class="flex items-center justify-center h-3/4">
