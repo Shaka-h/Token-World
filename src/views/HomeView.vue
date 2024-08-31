@@ -14,7 +14,7 @@
               <div>With NFTs begin your asset investments by investing in real estates, stocks, bonds ,etc represented as NFTs</div>
               <div>Benefit different services offered by service providers represented as NFTs such as special membership</div>
               Each piece is a limited edition masterpiece, waiting to be owned by a passionate collector like you
-              <span class="flex items-center w-full justify-center mt-4 mr-3 text-primary2 hover:font-bold cursor-pointer" @click="router.push('/Products')">
+              <span class="flex items-center w-full justify-center mt-4 mr-3 text-primary2 hover:font-bold cursor-pointer" @click="router.push('/market')">
                 <svg-icon name="enter" height="h-6" width="w-6" class="mr-1" color="#257ae4"></svg-icon> 
               </span>
             </div>

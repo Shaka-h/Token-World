@@ -1,11 +1,15 @@
 import {ipfsGateway} from "@/scripts/ContractConstants";
 
 // Function to add metadata to IPFS
-const fetchToken = async (tokenURI) => {
+const fetchToken = async (tokenURI) => {  
+  console.log(tokenURI, "PPPPPPPPPPPPPPPPPPPPPPPPPPP");
+
     try {
       const response = await fetch(`${ipfsGateway}${tokenURI}`);
-      const data = await response.json();
-      return data
+
+      // const data = await response.json();
+
+      return response
   
       // Handle data as needed
     } catch (error) {

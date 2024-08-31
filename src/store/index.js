@@ -6,14 +6,13 @@ import addMetadata from "@/scripts/IPFS.js";
 import fetchData from "@/scripts/fetchData";
 import fetchToken from "@/scripts/fetchToken";
 import { ethers } from 'ethers';
-import { marketPlace,marketPlace_ABI, nftMyCollection_ABI, nftFactory_Address, nftFactory_ABI, atsh_contractAddress, atsh_abi, TRA_walletAddress } from '@/scripts/ContractConstants'
+import { marketPlace,marketPlace_ABI, nftMyCollection_ABI, nftFactory_Address, nftFactory_ABI, TRA_walletAddress } from '@/scripts/ContractConstants'
 import axios from "axios";
 import { useRouter } from "vue-router";
 import router from '@/router';
 import {uploadFile} from "@/interfaces/global.interface.js";
-import { DSCEngine } from '@/scripts/ContractConstants'
 
-let { nftFactory_contract, marketPlace_contract, atsh_contract, DSCEngine_contract, DecentralizedStableCoin_contract, signer } = getSignerContract();
+let { nftFactory_contract, marketPlace_contract, atsh_contract, signer } = getSignerContract();
 // let router = useRouter()
 
 export const useNFTstore = defineStore('stableCoinStore', {
@@ -99,7 +98,7 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 // const tokenUrl = profileData[3];
 
                 // Fetch additional profile details from the token URL using fetchData function
-                const profileDetails = await fetchData(myCollection?.logo);
+                // const profileDetails = await fetchData(myCollection?.logo);
 
                 const promises = myCollection.map(async (collection) => {
 
@@ -318,7 +317,6 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 // Fetch profile data from the blockchain network
                 const collectionItems = await nftMyCollection_contract.getAllCollectionTokens();
 
-                console.log(collectionItems, "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
 
                 const promises = collectionItems.map(async (itemID) => {
 
@@ -431,13 +429,17 @@ export const useNFTstore = defineStore('stableCoinStore', {
 
                     const itemUrl = await nftMyCollection_contract.getTokenURIById(parseInt(itemID));
                     
-                    const itemData = await fetchToken(itemUrl);
+                    
+                    const itemData = await fetchData(itemUrl);
+                    const itemImage = await fetchToken(itemData[0]?.imageCID);
+
 
                     const marketItemData = await marketPlace_contract.fetchMarketItemById(itemID);
 
                     return {
                         ...itemData,
-                        ...marketItemData
+                        ...marketItemData,
+                        itemImage: itemData[0]?.imageCID
                     }
                 });
 
@@ -530,8 +532,6 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 // profileContractAddress = this.loadMyProfileContract(address)
 
                 const allCollections = await nftFactory_contract.getAllDeployedNFTCollections();
-
-                console.log(allCollections, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
    
                 // Update store state with fetched profiles
                 store.state['allCollections'] = allCollections;
@@ -552,7 +552,6 @@ export const useNFTstore = defineStore('stableCoinStore', {
 
             try {
                 store.isLoading = true;
-                console.log(item, "AAAAAAAAAAAAAAAAAAAAAAAA");
 
                 // profileContractAddress = this.loadMyProfileContract(address)
 
@@ -561,11 +560,14 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 const itemUrl = await nftMyCollection_contract.getTokenURIById(parseInt(item?.tokenId));
 
                 const itemData = await fetchToken(itemUrl);
+                const itemImage = await fetchData(itemUrl);
+
                 const marketItemData = await marketPlace_contract.fetchMarketItemById(parseInt(item?.tokenId));
 
                 const details = {
                     ...itemData,
-                    ...marketItemData
+                    ...marketItemData,
+                    itemImage: itemImage[0]?.imageCID
                 }
 
    
@@ -607,27 +609,27 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 store.isLoading = true;
                 console.log(data, "AAAAAAAAAAAAAAAAAAAAAAAA");
 
-                const buy = await marketPlace_contract.buyItem(data?.id);
+                const buy = await marketPlace_contract.buyItem(data?.id, { value: 5000000000000000000 });
 
                 const receipt = await buy.wait();
                 console.log(receipt, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-                if (receipt?.events[1]?.event == "itemSold") {
+                // if (receipt?.events[1]?.event == "itemSold") {
 
-                    const amountInWei = await this.etherToWei(data?.price)
+                //     const amountInWei = await this.etherToWei(data?.price)
 
-                    console.log(amountInWei, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                //     console.log(amountInWei, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                    // const mytokenBalance = await DecentralizedStableCoin_contract.approve( DSCEngine, amountInWei)
+                //     // const mytokenBalance = await DecentralizedStableCoin_contract.approve( DSCEngine, amountInWei)
 
-                    const pay = await atsh_contract.transfer(data?.seller, amountInWei);
+                //     const pay = await atsh_contract.transfer(data?.seller, amountInWei);
 
-                    const payment = pay.wait();
+                //     const payment = pay.wait();
 
-                    notifySuccess("Item Sold!");
-                } else {
-                    console.error('Error creating collection: Deployed contract address not returned.');
-                }
+                //     notifySuccess("Item Sold!");
+                // } else {
+                //     console.error('Error creating collection: Deployed contract address not returned.');
+                // }
 
 
             } catch (error) {

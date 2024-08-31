@@ -5,11 +5,11 @@
             <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Back
             </div>
-        </div>
+        </div>{{ itemData?.seller }}
         <div>
-            <div class="flex " style="height: 60vh"> 
+            <div class="flex " style="height: 60vh">
                 <div class="flex items-center justify-center border m-2 rounded-lg" style="width: 50%"> 
-                    <img :src="`http://127.0.0.1:8080/ipfs/${itemData?.imageCID}`" alt="icon description" class="p-2 h-64">
+                    <img :src="`http://127.0.0.1:8080/ipfs/${itemData?.itemImage}`" alt="icon description" class="p-2 h-64">
                 </div>
 
                 <div class="flex flex-col" style="width: 50%"> 
@@ -37,15 +37,15 @@
                         <div class="row"> 
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Price: </span>
-                                <span>{{ itemData?.total  }} Atsh </span>
+                                <span>{{ itemData?.total  }} Eth </span>
                             </div>
                             <div class="mt-4 flex flex-col col-md-3"> 
-                                <span class="font-bold">Tax: </span>
-                                <span>{{ itemData?.tax }} Atsh </span>
+                                <span class="font-bold">Fees: </span>
+                                <span>{{ itemData?.tax }} Eth </span>
                             </div>                            
                             <div class="mt-4 flex flex-col col-md-3"> 
                                 <span class="font-bold">Total: </span>
-                                <span>{{ itemData?.price}} Atsh </span>
+                                <span>{{ itemData?.price}} Eth </span>
                             </div>
                         </div>
                          <div class="flex gap-4 mt-8">                         

@@ -24,7 +24,7 @@ contract MyCollection is ERC721URIStorage {
     address public marketContractAddress;
 
 
-    string[] public allCollectionTokens;
+    uint256[] public allCollectionTokens;
     mapping (uint256 => string) tokenURIById;
 
     event tokenCreated(string tokenURI, uint256 itemId, uint256 time);
@@ -43,7 +43,7 @@ contract MyCollection is ERC721URIStorage {
         _mint(msg.sender, newItemId); // Mint the token to the caller
         _setTokenURI(newItemId, tokenURI); // Set the token URI
 
-        allCollectionTokens.push(tokenURI); // Add the new token ID to the array
+        allCollectionTokens.push(newItemId); // Add the new token ID to the array
         tokenURIById[newItemId] = tokenURI; // Store the token URI in the mapping
         setApprovalForAll(marketContractAddress, true); //grant transaction permission to marketplace
         emit tokenCreated(tokenURI, newItemId, block.timestamp);
@@ -51,7 +51,7 @@ contract MyCollection is ERC721URIStorage {
         return newItemId; // Return the new token ID
     }
 
-    function getAllCollectionTokens() external view returns (string[] memory) {
+    function getAllCollectionTokens() external view returns (uint256[] memory) {
         return allCollectionTokens; 
     }
 
@@ -73,8 +73,11 @@ contract NFTFactory {
     }
 
     mapping(address => MyNFTCollection) public nftCollectionsByAddress; // Mapping from contract address to NFT collection
-    mapping(address => MyNFTCollection) private collectionsByOwner;
+    mapping(address => MyNFTCollection[]) public collectionsByOwner;
+    mapping(address => address[]) private collectionsBy;
+
     MyNFTCollection[] public allNFTCollections;
+
 
     event NFTDeployed(address indexed owner, address indexed nftContract, string name, string symbol, string logo, string description, uint256 time);
 
@@ -82,8 +85,9 @@ contract NFTFactory {
         MyCollection nftContract = new MyCollection(_marketContractAddress, _name, _symbol, _logo, _description);
         MyNFTCollection memory newCollection = MyNFTCollection(msg.sender, address(nftContract), _name, _symbol, _logo, _description);
         nftCollectionsByAddress[address(nftContract)] = newCollection;
-        collectionsByOwner[msg.sender]  = newCollection;
+        collectionsByOwner[msg.sender].push(newCollection);
         allNFTCollections.push(newCollection);
+        collectionsBy[msg.sender].push(address(nftContract));
         emit NFTDeployed(msg.sender, address(nftContract), _name, _symbol, _logo, _description, block.timestamp);
         return address(nftContract);
     }
@@ -96,8 +100,9 @@ contract NFTFactory {
         return allNFTCollections;
     }
     
-    function getCollectionsByOwner() external view returns (MyNFTCollection memory) {
+    function getCollectionsByOwner() external view returns (MyNFTCollection[] memory) {
         return collectionsByOwner[msg.sender];
     }
+
 
 }

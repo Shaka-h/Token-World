@@ -24,8 +24,7 @@
                     <div v-if="item.sold" class="">
                       <div class="flex justify-center bg-green px-4 font-bold">OFF MARKET</div>
                     </div>
-
-                    <img :src="`${ipfsGateway}${item.imageCID}`" class="bg-black mt-4" style="height: 320px"></img>
+                    <img :src="`${ipfsGateway}${item.itemImage}`" class="bg-black mt-4" style="height: 320px"></img>
 
                     <div class="card-title">{{item?.name}}</div>
                     <div class="card-price">

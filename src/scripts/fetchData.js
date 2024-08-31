@@ -7,7 +7,9 @@ async function fetchData(tokenUrl) {
   try {
       const response = await fetch(`${ipfsGateway}${tokenUrl}`);
       const data = await response.json();
-      responseData.push(data); // Push data to responseData array
+      responseData.push(data); 
+      console.log(data, "MMMMMMMMMMMMMMMMMMMM");
+      
       // Handle data as needed
   } catch (error) {
       console.error('Error fetching data from', tokenUrl, ':', error);

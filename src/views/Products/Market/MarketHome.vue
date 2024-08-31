@@ -1,43 +1,51 @@
 <template>
     <div v-if="!viewAllCollections" class="mt-3 w-full">
-        <div class="flex justify-between"> 
-          <div class="bg-white mx-4 font-bold"><span class="text-2xl">ITEMS</span> </div>
-          <div @click="gobackItem()" v-if="viewAllProducts" class="px-2 py-1 rounded-lg text-white bg-primary2 mx-4 cursor-pointer">Back</div>
+      <div class="flex w-full p-2 justify-end mt-2">
+          <div class="flex">
+              <search-bar />
         </div>
-          <table class="table table-report">
-            <thead>
-            <tr>
-              <th class="whitespace-nowrap">No</th>
-              <th class="whitespace-nowrap" v-for="(column, index) in columns" :key="index">
-                {{ column }}
-              </th>
-              <th class="whitespace-nowrap" v-if="hasActions">{{ actions }}</th>
+        <div @click="goBack" class="bg-primary text-white py-1 px-2 ml-2 rounded-lg cursor-pointer"> 
+          Back
+        </div>
+      </div>
+      <div class="flex justify-between"> 
+        <div class="mx-4 font-bold"><span class="text-2xl">ITEMS</span> </div>
+        <div @click="gobackItem()" v-if="viewAllProducts" class="px-2 py-1 rounded-lg text-white bg-primary2 mx-4 cursor-pointer">Back</div>
+      </div>
+        <table class="table table-report">
+          <thead>
+          <tr>
+            <th class="whitespace-nowrap">No</th>
+            <th class="whitespace-nowrap" v-for="(column, index) in columns" :key="index">
+              {{ column }}
+            </th>
+            <th class="whitespace-nowrap" v-if="hasActions">{{ actions }}</th>
+          </tr>
+          </thead>
+          <tbody v-if="listItem?.length === 0">
+          <tr>
+            <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="skeleton">
+              <div class="h-4"></div>
+            </td>
+          </tr>
+          </tbody>
+          <tbody v-if="!listItem?.length">
+          <tr>
+            <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="text-center p-2">
+              <span class="font-semibold text-base">{{ "NO ITEMS AVAILABLE" }}</span>
+            </td>
+          </tr>
+          </tbody>
+          <tbody v-if="listItem?.length">
+            <tr class="intro-x" v-for="(data, index) of listItem" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ data[9].name }}</td>
+              <td>{{ data[9].description }}</td>
+              <td>{{ data[5] }}</td>
+              <td @click="viewProduct(data[1],data[0])" class="cursor-pointer">view</td>
             </tr>
-            </thead>
-            <tbody v-if="listItem?.length === 0">
-            <tr>
-              <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="skeleton">
-                <div class="h-4"></div>
-              </td>
-            </tr>
-            </tbody>
-            <tbody v-if="!listItem?.length">
-            <tr>
-              <td :colspan="Math.ceil( Object.keys(columns)?.length + 2)" class="text-center p-2">
-                <span class="font-semibold text-base">{{ "NO ITEMS AVAILABLE" }}</span>
-              </td>
-            </tr>
-            </tbody>
-            <tbody v-if="listItem?.length">
-              <tr class="intro-x" v-for="(data, index) of listItem" :key="index">
-                <td>{{ index + 1 }}</td>
-                <td>{{ data[9].name }}</td>
-                <td>{{ data[9].description }}</td>
-                <td>{{ data[5] }}</td>
-                <td @click="viewProduct(data[1],data[0])" class="cursor-pointer">view</td>
-              </tr>
-            </tbody>
-          </table>
+          </tbody>
+        </table>
       </div>
   
       
@@ -50,6 +58,7 @@ import { useRouter } from 'vue-router';
 import {getSignerContract} from '../../../scripts/ContractUtils';
 import {ethers} from 'ethers';
 import {nftMyCollection_ABI } from '@/scripts/ContractConstants'
+import SearchBar from '@/components/SearchBar.vue';
 
 let {signer, marketPlace_contract, nftFactory_contract} = getSignerContract();
 

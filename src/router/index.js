@@ -10,6 +10,8 @@ import Taxations from '@/views/Taxes/Taxations.vue'
 import MarketView from '@/views/Products/Market/MarketView.vue'
 import Connected from '@/views/Connected.vue'
 import collectionItems from '@/views/Profile/collectionItems.vue'
+import AuctionHome from '@/views/Products/Aution/AuctionHome.vue'
+import MarketHome from '@/views/Products/Market/MarketHome.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +30,16 @@ const router = createRouter({
           path: '/Products',
           name: 'product',
           component: ProductHome
+        },
+        {
+          path: '/auction',
+          name: 'auction',
+          component: AuctionHome
+        },
+        {
+          path: '/market',
+          name: 'market',
+          component:MarketHome
         },
         {
           path: '/Collections',

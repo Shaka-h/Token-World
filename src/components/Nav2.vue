@@ -12,13 +12,13 @@
             <div class="flex space-x-4"> 
                 <div
                 class="text-white hover:border-b cursor-pointer"
-                @click="handleComponentClick(home)"
+                @click="handleComponentClick('home')"
               >
                 Home
               </div>
               <div
                 class="text-white hover:border-b cursor-pointer"
-                @click="handleComponentClick(connect)"
+                @click="handleComponentClick('connect')"
               >
                 Connect
               </div>
@@ -104,7 +104,7 @@
     
     <script setup>
     import SvgIcon from "@/components/shared/SvgIcon.vue";
-    import {useRoute} from "vue-router";
+    import {useRoute, useRouter} from "vue-router";
     import {onMounted, ref, computed} from "vue";
     import {walletAddressConnected} from "@/scripts/ContractConstants";
     import { useNFTstore } from "@/store/index.js";
@@ -112,6 +112,7 @@
   
     const alphaConnectStore = useNFTstore();
     const route = useRoute()
+    const router  = useRouter()
     const hoveredLink = ref(null)
     const childHoveredLink = ref(null)
     const { getStoreItem } = storeToRefs(alphaConnectStore)
@@ -126,32 +127,32 @@
   
   const navigationLinks = ref([
     {
-      name: "Collections",
-      link: "/posts",
-      icon: "testimonials",
-      permissions: [""],
-    },
-    {
       name: "Market",
-      link: "/posts",
+      link: "/market",
       icon: "testimonials",
       permissions: [""],
     },
     {
       name: "Auction",
-      link: "/posts",
+      link: "/auction",
+      icon: "testimonials",
+      permissions: [""],
+    },
+    {
+      name: "Collections",
+      link: "/collections",
       icon: "testimonials",
       permissions: [""],
     },
     {
       name: "Profile",
-      link: "/posts",
+      link: "/profile",
       icon: "testimonials",
       permissions: [""],
     },
     {
       name: "Create",
-      link: "/posts",
+      link: "/create",
       icon: "testimonials",
       permissions: [""],
     },
@@ -176,6 +177,7 @@
   
   const handleComponentClick = (id) => {
     activeComponent.value = id;
+    console.log(id);
     
     if (id === 'home') {
       router.push('/'); 

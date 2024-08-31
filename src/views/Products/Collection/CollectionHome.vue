@@ -12,7 +12,7 @@
 
   <div class="mt-3" >
     <div class="flex justify-between"> 
-      <div class="bg-white mx-4 mt-4 font-bold"><span class="text-2xl">COLLECTIONS</span></div>
+      <div class="mx-4 mt-4 font-bold"><span class="text-2xl">COLLECTIONS</span></div>
       <div @click="gobackCollection()" v-if="viewAllCollections" class="px-2 rounded-lg py-1 bg-primary2 text-white mx-4 cursor-pointer">Back</div>
     </div>
     <div class="flex">
@@ -26,7 +26,7 @@
           <p class="font-normal text-white dark:text-gray-400">{{item.description}}</p>
         </div> 
       </div>
-      <div v-if="!allCollections?.length" class="flex justify-center w-full mt-8 bg-white p-4"> 
+      <div v-if="!allCollections?.length" class="flex justify-center w-full mt-8  p-4"> 
         <span class="font-semibold text-base">{{ "NO COLLECTIONS AVAILABLE" }}</span>
       </div>
     </div>

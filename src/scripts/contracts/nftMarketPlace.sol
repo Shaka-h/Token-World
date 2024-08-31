@@ -4,11 +4,13 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
- //prevents re-entrancy attacks
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "./atsh.sol";
 
-contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
+contract NFTMarket is ReentrancyGuard, AccessControl {
+
+    error Price_Must_Be_Above_Zero();
+
+
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds; //total number of items ever created
@@ -16,11 +18,10 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     Counters.Counter private _offerID;
     Counters.Counter private _auctionID;
     Counters.Counter private _auctionsClosed;
-    bytes32 public constant GOVERN_ROLE = keccak256("GOVERN_ROLE");
+    uint256 public _totalTax;  // Change to uint256 for accumulated tax
     address payable current_owner; //mmiliki wa item at any time t
     address payable seller; //anayetengeneza item kwenye market
     address payable TRA = payable(0x435C67b768aEDF84c9E6B00a4E8084dD7f1bc5FF);
-    COIN private coin;
 
     struct MarketItem {
         uint itemId;
@@ -75,13 +76,14 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     }
 
     struct taxes{
-       uint256 itemId;
-       uint256 tokenId;
-       address from;
-       address to;
-       uint256 price; 
-       uint256 tax;
-       uint256 total;
+        uint256 itemId;
+        uint256 tokenId;
+        address from;
+        address to;
+        uint256 price; 
+        uint256 tax;
+        uint256 total;
+        uint256 time;
     }
 
 
@@ -92,6 +94,9 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     mapping (address => sales[]) public mySales;
     mapping(uint256 => Buyer[]) public buyersMadeToItem;
     mapping (address => taxes[]) public mytaxes;
+    mapping (address => uint256[]) private myItemsID;
+
+    taxes[] public allTaxes;
 
     //log message (when Item is sold)
     event MarketItemCreated (
@@ -134,8 +139,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
        uint256 total
     );
 
-    constructor(COIN _coin) {
-        coin = _coin;
+    constructor() {
         current_owner = payable(msg.sender);
     }
 
@@ -144,8 +148,10 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         address nftContract,
         uint256 tokenId,
         uint price) public payable nonReentrant{
-         
-        require(price > 0, "Price must be above zero");
+        
+        if (price <= 0) {
+            revert Price_Must_Be_Above_Zero();
+        }
 
         _itemIds.increment(); //add 1 to the total number of items ever created
         uint256 itemId = _itemIds.current();
@@ -165,6 +171,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
              actualpayment,
              false
         );
+        myItemsID[msg.sender].push(itemId);
 
         //transfer ownership of the nft to the contract itself
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
@@ -271,7 +278,7 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         return true;
     }
 
-    function buyItem (uint256 itemID) public  nonReentrant {
+    function buyItem (uint256 itemID) public  nonReentrant payable {
         
         require(idMarketItem[itemID].owner != msg.sender, "Item owner cant buy the item");
         require(idMarketItem[itemID].sold == false, "Item already sold");
@@ -284,7 +291,9 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         uint256 actualPayment = idMarketItem[itemID].price; 
 
         // Transfer payment from buyer to seller
-        // coin.transfer(idMarketItem[itemID].seller, buyPrice);
+        // coin.transfer(idMarketItem[itemID].seller, idMarketItem[itemID].price);
+        (bool sent,) = idMarketItem[itemID].seller.call{value: idMarketItem[itemID].price}("");
+        require(sent, "Failed to send Ether");
 
         // Transfer NFT ownership from seller to buyer
         IERC721(nftContractAddress).transferFrom(address(this), msg.sender, tokenId);
@@ -293,6 +302,8 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
         idMarketItem[itemID].owner = payable(msg.sender);
         idMarketItem[itemID].sold = true;
         _itemsSold.increment();
+        _totalTax = _totalTax.add(tax);  // Accumulate the tax
+
 
         emit itemSold(
             itemID,
@@ -312,14 +323,15 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             total
         );
 
-        mytaxes[msg.sender].push(taxes(
+        allTaxes.push(taxes(
             itemID,
             tokenId,
             msg.sender,
             idMarketItem[itemID].seller,
             actualPayment,
             tax,
-            total
+            total,
+            block.timestamp
         ));
 
         mySales[msg.sender].push(sales(
@@ -384,8 +396,8 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             previousOffers[previousOffers.length - 1].offerAccepted = false;
 
             // Transfer payment from contract to previousOfferer
-            coin.transferWei(previousOffers[previousOffers.length - 1].offerer, previousOffers[previousOffers.length - 1].offerPrice);
-
+            (bool sent, ) = previousOffers[previousOffers.length - 1].offerer.call{value: previousOffers[previousOffers.length - 1].offerPrice}("");
+            require(sent, "Failed to send Ether");
             // previousOffers[previousOffers.length - 1].offerer.transfer(previousOffers[previousOffers.length - 1].offerPrice);
         }
 
@@ -493,7 +505,8 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
             idMarketItem[auctionID].seller,
             offerPrice,
             tax,
-            actualpayment
+            actualpayment,
+            block.timestamp
         ));
     }
 
@@ -612,33 +625,20 @@ contract NFTMarket is Ownable(msg.sender), ReentrancyGuard, AccessControl {
     }
     
     /// @notice fetch list of NFTS owned/bought by this user
-    function fetchMyNFTs() public view returns (MarketItem[] memory){
+    function fetchMyNFTs() public view returns (uint256[] memory){
         //get total number of items ever created
-        uint totalItemCount = _itemIds.current();
-
-        uint itemCount = 0;
-        uint currentIndex = 0;
-
-
-        for(uint i = 0; i < totalItemCount; i++){
-            //get only the items that this user has bought/is the owner
-            if(idMarketItem[i+1].owner == msg.sender){
-                itemCount += 1; //total length
-            }
-        }
-
-        MarketItem[] memory items = new MarketItem[](itemCount);
-        for(uint i = 0; i < totalItemCount; i++){
-            if(idMarketItem[i+1].owner == msg.sender){
-                uint currentId = idMarketItem[i+1].itemId;
-                MarketItem storage currentItem = idMarketItem[currentId];
-                items[currentIndex] = currentItem;
-                currentIndex += 1;
-            }
-        }
-        return items;
-
+        return myItemsID[msg.sender];
     }
 
+    /// @notice fetch list of NFTS owned/bought by this user
+    function fetchMarketItemById(uint256 itemId) public view returns (MarketItem memory){
+        //get total number of items ever created
+        return idMarketItem[itemId];
+    }
+
+    // function getAllTaxes() public view returns (taxes[] memory) {
+    //     return allTaxes;
+    // }
+    
 
 }
