@@ -1,13 +1,10 @@
 <template>
-    <div class="p-3 mt-4 flex justify-between">
+    <div class="flex justify-between">
         <div class="font-bold text-3xl"> 
             Create your NFTs
         </div>
-        <div @click="goBack" class="bg-primary text-white items-center py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-            back
-        </div>
     </div>
-    <div class="flex m-4 h-full flex justify-evenly"> 
+    <div class="flex h-full flex justify-evenly"> 
         <div class="flex flex-col" style="width: 40%">         
             <template v-for="(component, index) of components" :key="index" >
                      <div v-if="component.id === activeComponent" class="cursor-pointer border mt-8 p-4 text-white rounded-lg bg-primary2">

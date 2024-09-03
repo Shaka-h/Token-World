@@ -1,13 +1,21 @@
 <template>
     <div class="px-4 pb-4">
-        <div class="flex justify-end mt-4 space-x-3">
-            <!-- <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">My Offers</div> -->
-            <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-                Back
-            </div>
+
+        <div class="flex justify-between w-full"> 
+            <div class="flex flex-row">
+                <template v-for="(tab, index) of activity" :key="index">
+                  <button class="primary2-action-btn mx-1 intro-x" v-if="tab.id === activeTab">
+                    {{ tab.name }}
+                   </button>
+                  <button class="primary-action-btn mx-1" v-else @click="activeTab = tab.id">
+                    {{ tab.name }}
+                </button>
+                </template>
+            </div>            
         </div>
+
         <div>
-            <div class="flex " style="height: 60vh"> 
+            <div v-if="activeTab === 'detail' " class="flex " style="height: 60vh"> 
     
     
                 <div class="flex items-center justify-center border m-2 rounded-lg" style="width: 40%"> 
@@ -61,7 +69,7 @@
                 </div>
             </div>
     
-            <div class="mt-8"> 
+            <div v-if="activeTab === 'offers' " class="mt-8"> 
                 <div class="flex justify-between"> 
                     <div class="font-bold text-xl">Offers</div>
                     <div v-if="!itemMarketDetails[6]" @click="closeAuction()" class="border py-1 px-4 bg-primary text-white rounded-lg mb-4 cursor-pointer">Close Auction</div>
@@ -116,6 +124,17 @@ import {getSignerContract} from '../../../scripts/ContractUtils';
 import {nftMyCollection_ABI, marketPlace } from '@/scripts/ContractConstants'
 import {ethers} from 'ethers';
 
+const activeTab = ref('details')
+const activity = ref([
+    {
+        name: "Details",
+        id: 'details'
+    },
+    {
+        name: "Offers",
+        id: 'offers'
+    }
+])
 
 let {signer, marketPlace_contract, atsh_contract} = getSignerContract();
 

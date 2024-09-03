@@ -1,13 +1,10 @@
 <template>
     <div class="px-4 pb-4">
-        <div class="flex justify-end space-x-3">
+        <!-- <div class="flex justify-end space-x-3">
             <div  @click="router.push('/create')" class="bg-primary2 text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Add Collection
             </div>
-            <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-                Back
-            </div>
-        </div>
+        </div> -->
     
         <div class="row">
             <div @click="router.push(`/profile/${myCollection.NftContract}`)" v-for="(myCollection, index) of myCollections" :key="index" class="card col-md-4 hover:bg-gray hover:p-3 p-2 my-2 cursor-pointer" style="">   

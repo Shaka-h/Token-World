@@ -6,9 +6,7 @@
     <div class="px-4 pb-4">
         <div class="flex justify-between my-2 ">
             <div class="flex items-center"> 
-                <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-                    Back
-                </div>
+                
                 <div class="font-bold uppercase">Items for {{selectedCollection?.name}} collection</div>
             </div>
             <div class=""> 

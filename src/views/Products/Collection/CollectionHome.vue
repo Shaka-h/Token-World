@@ -1,13 +1,6 @@
 <template>
-  <div class="flex justify-end mt-4 space-x-3">
-    <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-        Back
-    </div>
-</div>
-  <div class="flex w-full p-2 justify-end mt-2">
-      <div class="flex">
-          <search-bar />
-    </div>
+  <div class="flex w-full justify-end">
+    <search-bar />
   </div>
 
   <div class="mt-3" >

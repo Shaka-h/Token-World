@@ -1,13 +1,18 @@
 <template>
     <div class="px-4 pb-4">
-        <div class="flex justify-end mt-4 space-x-3">
-            <!-- <div @click="router.push('/cart/1')" class="bg-primary2 text-white py-1 px-2 rounded-lg cursor-pointer">My Offers</div> -->
-            <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-                Back
-            </div>
-        </div>{{ itemData?.seller }}
+      <div class="flex flex-row">
+        <template v-for="(tab, index) of activity" :key="index">
+          <button class="primary2-action-btn mx-1 intro-x" v-if="tab.id === activeTab">
+            {{ tab.name }}
+           </button>
+          <button class="primary-action-btn mx-1" v-else @click="activeTab = tab.id">
+            {{ tab.name }}
+         </button>
+        </template>
+      </div>
+
         <div>
-            <div class="flex " style="height: 60vh">
+            <div v-if="activeTab === 'details'" class="flex " style="height: 60vh">
                 <div class="flex items-center justify-center border m-2 rounded-lg" style="width: 50%"> 
                     <img :src="`http://127.0.0.1:8080/ipfs/${itemData?.itemImage}`" alt="icon description" class="p-2 h-64">
                 </div>
@@ -64,7 +69,7 @@
                 </div>
             </div>
     
-            <div class="mt-8"> 
+            <div v-if="activeTab === 'sales' " class="mt-8"> 
                 <div class="flex justify-between"> 
                     <div class="font-bold text-xl">Sales</div>
                 </div>
@@ -123,23 +128,27 @@ import axios from "axios";
 import { useNFTstore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
 
+const activeTab = ref('details')
+const activity = ref([
+    {
+        name: "Details",
+        id: 'details'
+    },
+
+    {
+        name: "Sales",
+        id: 'sales'
+    }
+])
 
 let {signer, marketPlace_contract, atsh_contract} = getSignerContract();
 
 const NFTStore = useNFTstore();
 const { getStoreItem } = storeToRefs(NFTStore)
 
-
-
 const router = useRoute()
-const nftMyCollection_contract = new ethers.Contract(router?.params?.collection, nftMyCollection_ABI, signer);
 
-const offer = ref(0);
-
-const itemDetails = ref();
 const itemMarket = ref([]);
-const offerMade = ref([])
-const getSalesMade = ref([])
 
 const columns = ref({
     "from": "From",
@@ -160,46 +169,16 @@ const itemMarketDetails = computed(() => {
 
 const buyItem = async () => {
     const itemId = itemData.value?.price
+    console.log(itemData.value, "IIIIIIIIIIIIIIII");
+    
     console.log(router?.params?.tokenId, "00000000000000000000000000");
     const buy = await NFTStore.payAtsh({
         id: router?.params?.tokenId,
-        price: parseInt(itemData.value?.price),
-        seller: itemData.value?.seller
+        total: parseInt(itemData.value?.price),
+        seller: itemData.value?.seller,
+        price: parseInt(itemData.value?.total),
+        fees: parseInt(itemData.value?.tax)
     }); 
-
-
-    // if(approve){
-    //     const itemId = itemMarketDetails.value[0].hex
-    //     const amount = itemMarketDetails.value[7]?.hex;
-    //     const tax = itemMarketDetails.value[6]?.hex;
-    //     const owner = itemMarketDetails.value[4];
-    //     const seller = itemMarketDetails.value[3];
-    //     const receipt = ref(owner);
-
-    //     if (owner === "0x0000000000000000000000000000000000000000") {
-    //         receipt.value = seller;
-    //     }
-
-    //     console.log(amount, "oofjij", itemMarketDetails.value[3]);
-    //     console.log(receipt.value);
-
-    //     try {
-    //         // Now you can make atsh payment from atsh contract
-    //         const pay = await atsh_contract.transferWei(receipt.value, amount);
-    //         const payTax = await atsh_contract.transferWei(TRA_walletAddress, tax);
-    //         await pay.wait();
-    //         await payTax.wait();
-            
-    //         // Now you can call buyItem using itemId from the outer scope
-    //         const buy = await marketPlace_contract.buyItem(itemId);
-    //         await buy.wait();
-
-    //     } catch (error) {
-    //         console.error('Error:', error.message);
-    //     }
-    // }
-    
-    // window.location.reload()
 }
 
 

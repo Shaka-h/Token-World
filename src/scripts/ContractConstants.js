@@ -16,7 +16,7 @@ export const ipfsGateway = 'http://127.0.0.1:8080/ipfs/'
   
 
 // Anvil
-export const marketPlace = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1"
+export const marketPlace = "0x4826533B4897376654Bb4d4AD88B7faFD0C98528"
 // Sepolia
 // export const marketPlace = "0x448BBCE2AdCdA84407f769dFeaF9F199F2F3Ea90"
 export const marketPlace_ABI = [
@@ -448,7 +448,13 @@ export const marketPlace_ABI = [
 			}
 		],
 		"name": "buyItem",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "payable",
 		"type": "function"
 	},

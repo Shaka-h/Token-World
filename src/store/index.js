@@ -317,18 +317,24 @@ export const useNFTstore = defineStore('stableCoinStore', {
                 // Fetch profile data from the blockchain network
                 const collectionItems = await nftMyCollection_contract.getAllCollectionTokens();
 
-
                 const promises = collectionItems.map(async (itemID) => {
 
                     const itemUrl = await nftMyCollection_contract.getTokenURIById(parseInt(itemID));
                     
-                    const itemData = await fetchToken(itemUrl);
+                    const itemData = await fetchData(itemUrl);
+
+                    console.log(itemData, "BBBBBBBBBBBBBBBB")
+
 
                     const marketItemData = await marketPlace_contract.fetchMarketItemById(itemID);
 
                     return {
-                        ...itemData,
-                        ...marketItemData
+                        // ...itemData,
+                        ...marketItemData,
+                        itemData: itemData,
+                        name: itemData[0]?.name,
+                        description: itemData[0]?.description
+
                     }
                 });
 
@@ -608,28 +614,15 @@ export const useNFTstore = defineStore('stableCoinStore', {
             try {
                 store.isLoading = true;
                 console.log(data, "AAAAAAAAAAAAAAAAAAAAAAAA");
+                
+                const amountInWei = await this.etherToWei(data?.total)
+                
+                console.log(amountInWei, "AAAAAAAAAAAAAAAAAAAAAAAA");
 
-                const buy = await marketPlace_contract.buyItem(data?.id, { value: 5000000000000000000 });
+                const buy = await marketPlace_contract.buyItem(data?.id, { value: amountInWei });
 
                 const receipt = await buy.wait();
                 console.log(receipt, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-                // if (receipt?.events[1]?.event == "itemSold") {
-
-                //     const amountInWei = await this.etherToWei(data?.price)
-
-                //     console.log(amountInWei, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
-                //     // const mytokenBalance = await DecentralizedStableCoin_contract.approve( DSCEngine, amountInWei)
-
-                //     const pay = await atsh_contract.transfer(data?.seller, amountInWei);
-
-                //     const payment = pay.wait();
-
-                //     notifySuccess("Item Sold!");
-                // } else {
-                //     console.error('Error creating collection: Deployed contract address not returned.');
-                // }
 
 
             } catch (error) {

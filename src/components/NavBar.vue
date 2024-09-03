@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row justify-between pt-0 px-4 items-center" style="background-color: #0D1042">
-      <div class="h-16 flex items-center w-16 cursor-pointer" @click="router.push('/')"> 
+      <!-- <div class="h-16 flex items-center w-16 cursor-pointer" @click="router.push('/')"> 
         <img src="../../public/saturn.png"/>
       </div>
       <div class="flex space-x-4"> 
@@ -20,7 +20,7 @@
             {{ component.name }}
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </template>
   

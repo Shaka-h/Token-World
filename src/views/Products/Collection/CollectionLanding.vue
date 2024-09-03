@@ -1,14 +1,8 @@
 <template>
-    <div class="flex justify-end mt-4 space-x-3">
-      <div @click="goBack" class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
-          Back
-      </div>
-  </div>
-    <div class="flex w-full p-2 justify-end mt-2">        
-        <div class="flex">
-            <search-bar />
-        </div>
+    <div class="flex w-full justify-end">        
+      <search-bar />
     </div>
+    
     <div class="mt-3 w-full">
       <div class="bg-white">ITEMS </div>
       <simple-table :columns="columns" :table-data="collection" :has-search="false">
@@ -23,7 +17,7 @@
           </div>
         </template>
         <template v-slot:image="{itemData}">
-                <img :src="'http://127.0.0.1:8080/ipfs/' + itemData.imageCID"  alt="icon description" class="p-2 h-16">
+                <img :src="'http://127.0.0.1:8080/ipfs/' + itemData?.itemData[0]?.imageCID"  alt="icon description" class="p-2 h-16">
           </template>
     </simple-table>
     </div>

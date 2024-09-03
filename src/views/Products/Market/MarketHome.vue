@@ -1,12 +1,7 @@
 <template>
-    <div v-if="!viewAllCollections" class="mt-3 w-full">
-      <div class="flex w-full p-2 justify-end mt-2">
-          <div class="flex">
-              <search-bar />
-        </div>
-        <div @click="goBack" class="bg-primary text-white py-1 px-2 ml-2 rounded-lg cursor-pointer"> 
-          Back
-        </div>
+    <div v-if="!viewAllCollections" class="">
+      <div class="flex w-full justify-end">
+        <search-bar />
       </div>
       <div class="flex justify-between"> 
         <div class="mx-4 font-bold"><span class="text-2xl">ITEMS</span> </div>

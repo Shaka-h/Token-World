@@ -1,7 +1,7 @@
 <template>
-    <div class="m-4 "> 
+    <div class=""> 
         <div class="flex justify-between w-full"> 
-            <div class="flex flex-row mt-4">
+            <div class="flex flex-row">
                 <template v-for="(tab, index) of activity" :key="index">
                   <button class="primary2-action-btn mx-1 intro-x" v-if="tab.id === activeTab">
                     {{ tab.name }}
@@ -10,10 +10,10 @@
                     {{ tab.name }}
                 </button>
                 </template>
-            </div>
-            
+            </div>            
         </div>
-        <div v-if="activeTab==='mycart'" class="flex justify-end mt-4 space-x-3">
+        
+        <div v-if="activeTab==='mycart'" class="flex justify-end space-x-3">
             <div class="bg-primary text-white py-1 px-2 mr-2 rounded-lg cursor-pointer"> 
                 Buy All
             </div>
